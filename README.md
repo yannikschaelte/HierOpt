@@ -1,2 +1,3 @@
 # HierOpt
-A MatLab Interface to the AMICI toolbox for hierarchical optimization
+
+A MatLab toolbox for the analytical computation of scaling factors (proportionality, offsets, variance parameters).
