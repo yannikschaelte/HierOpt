@@ -11,3 +11,5 @@ amiwrap('JakStat','JakStat_syms',exdir)
 amiwrap('JakStat_hierarchical','JakStat_hierarchical_syms',exdir)
 
 amiwrap('JakStat_hierarchical_adjoint','JakStat_hierarchical_adjoint_syms',exdir)
+
+amiwrap('JakStat_hierarchical_adjoint_offsets','JakStat_hierarchical_adjoint_offsets_syms',exdir)

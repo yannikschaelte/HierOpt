@@ -49,9 +49,9 @@ end
         % in every experiment, the timepoints and conditions are the same
         % over all observables and replicates
         tout_j = D(j).t;
-        kappa_j = [ kappa(j,:) 1 1 ]; % default values for scalings
+        kappa_j = [ kappa(j,:) 0 0 1 1 ]; % default values for scalings
         data_j = []; % no data
-        sol = simulate_JakStat_hierarchical_adjoint(tout_j,theta,kappa_j,data_j,amioptions);
+        sol = simulate_JakStat_hierarchical_adjoint_offsets(tout_j,theta,kappa_j,data_j,amioptions);
         if sol.status < 0
             error(['failed to integrate ODE for experiment ' num2str(j)])
         end
@@ -75,7 +75,8 @@ end
     for ie = 1:n_e
         sigma2_e = sigma2(:,:,:,ie);
         c_e = c(:,:,:,ie);
-        y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y));
+        b_e = zeros(size(c_e));
+        y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y)+b_e);
         nlLH = nlLH + sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
                     bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     end
@@ -98,12 +99,16 @@ end
                 c_re = c_by_y(:,:,ir,ie);
                 c_re = reshape(c_re,1,[]);
                 
+%                 b_re = b_by_y(:,:,ir,ie);
+                b_re = zeros(size(c_re));
+                b_re = reshape(b_re,1,[]);
+                
                 sigma2_re = sigma2_by_y(:,:,ir,ie);
                 sigma2_re = reshape(sigma2_re,1,[]);
      
                 sigma2_re = repmat(sigma2_re,length(tout_e),1);
                 
-                kappa_re = [ kappa(ie,:) c_re ]; % default values for scalings
+                kappa_re = [ kappa(ie,:) b_re c_re ]; % default values for scalings
                 
                 my_re = D(ie).my(:,:,ir); % data
                 data_re.t = tout_e;
@@ -112,7 +117,7 @@ end
                 data_re.condition = kappa_re;
                 data_re = amidata(data_re);
                 
-                sol = simulate_JakStat_hierarchical_adjoint(tout_e,theta,kappa_re,data_re,amioptions);
+                sol = simulate_JakStat_hierarchical_adjoint_offsets(tout_e,theta,kappa_re,data_re,amioptions);
                 if sol.status < 0
                     error(['failed to integrate ODE for experiment ' num2str(ie)])
                 end

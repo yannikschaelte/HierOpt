@@ -1,13 +1,13 @@
-% simulate_JakStat_hierarchical_adjoint.m is the matlab interface to the cvodes mex
+% simulate_JakStat_hierarchical_adjoint_offsets.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
 %   this routine was generated using AMICI commit 805585fa42ebb2c76e6ec281cde6df9e983aaa80 in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======
-% [...] = simulate_JakStat_hierarchical_adjoint(tout,theta)
-% [...] = simulate_JakStat_hierarchical_adjoint(tout,theta,kappa,data,options)
-% [status,tout,x,y,sx,sy] = simulate_JakStat_hierarchical_adjoint(...)
+% [...] = simulate_JakStat_hierarchical_adjoint_offsets(tout,theta)
+% [...] = simulate_JakStat_hierarchical_adjoint_offsets(tout,theta,kappa,data,options)
+% [status,tout,x,y,sx,sy] = simulate_JakStat_hierarchical_adjoint_offsets(...)
 %
 % INPUTS:
 % =======
@@ -93,7 +93,7 @@
 % sol.sy ... time-resolved output sensitivity vector
 % sol.z ... event output
 % sol.sz ... sensitivity of event output
-function varargout = simulate_JakStat_hierarchical_adjoint(varargin)
+function varargout = simulate_JakStat_hierarchical_adjoint_offsets(varargin)
 
 % DO NOT CHANGE ANYTHING IN THIS FILE UNLESS YOU ARE VERY SURE ABOUT WHAT YOU ARE DOING
 % MANUAL CHANGES TO THIS FILE CAN RESULT IN WRONG SOLUTIONS AND CRASHING OF MATLAB
@@ -109,7 +109,7 @@ else
     kappa=[];
 end
 
-if(length(theta)<11)
+if(length(theta)<9)
     error('provided parameter vector is too short');
 end
 
@@ -125,7 +125,7 @@ else
     options_ami = amioption();
 end
 if(isempty(options_ami.sens_ind))
-    options_ami.sens_ind = 1:11;
+    options_ami.sens_ind = 1:9;
 end
 if(options_ami.sensi>1)
     error('Second order sensitivities were requested but not computed');
@@ -202,10 +202,10 @@ end
 if(not(length(tout)==length(unique(tout))))
     error('Provided time vector has non-unique entries!!');
 end
-if(max(options_ami.sens_ind)>11)
+if(max(options_ami.sens_ind)>9)
     error('Sensitivity index exceeds parameter dimension!')
 end
-if(length(kappa)<5)
+if(length(kappa)<7)
     error('provided condition vector is too short');
 end
 init = struct();
@@ -227,7 +227,7 @@ if(~isempty(options_ami.sx0))
     end
     init.sx0 = bsxfun(@times,options_ami.sx0,1./permute(chainRuleFactor(:),[2,1]));
 end
-sol = ami_JakStat_hierarchical_adjoint(tout,theta(1:11),kappa(1:5),options_ami,plist,pbar(plist+1),xscale,init,data);
+sol = ami_JakStat_hierarchical_adjoint_offsets(tout,theta(1:9),kappa(1:7),options_ami,plist,pbar(plist+1),xscale,init,data);
 if(nargout>1)
     varargout{1} = sol.status;
     varargout{2} = sol.t;

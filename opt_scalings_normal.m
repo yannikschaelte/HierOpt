@@ -1,4 +1,4 @@
-function [ c,sigma2,c_by_y,sigma2_by_y,b ] = opt_scalings_normal(sim,data,options)
+function [ c,sigma2,c_by_y,sigma2_by_y,b,b_by_y ] = opt_scalings_normal(sim,data,options)
 % This function computes the value of the negative-log-likelihood function,
 % its gradient and its Hessian at theta
 %
@@ -144,7 +144,8 @@ for ie = 1:numel(options.exp_groups.proportionality)
                arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
             end
             
-            b(:,ind_y,ind_r,ind_e) = opt_c_normal(arr_y,arr_h);
+%             b(:,ind_y,ind_r,ind_e) = opt_b_normal(arr_y,arr_h);
+%             b_by_y(:,iy,ind_r,ind_e) = tempb;
             arr_b = zeros(size(arr_y));
             
             % compute optimal cs
@@ -226,6 +227,6 @@ end
 % for the further processing, only return one c, since c will be the same
 % for all time points, if we for example want to use it in the standard way
 % with amici and adjoints
-b = b(1,:,:,:);
-c = c(1,:,:,:);
+% b = b(1,:,:,:);
+% c = c(1,:,:,:);
 % sigma2 = sigma2(1,:,:,:);

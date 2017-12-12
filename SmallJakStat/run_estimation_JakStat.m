@@ -17,8 +17,17 @@ options.llh.save_analytical = false;
 
 options.MS.foldername = ['results_SmallJakStat_' approach '_' distribution];
 
-parameters = getMultiStarts(parameters,@(xi) ...
-    neglogLikelihood_JakStat(xi,kappa,D,distribution,options),options.MS);
-save(options.MS.foldername)
+switch approach
+    case 'hierarchical-adjoint'
+        parameters_res = getMultiStarts(parameters,@(xi)...
+            neglogLikelihood_JakStat_hierarchical_adjoint(xi,kappa,D,distribution,options),options.MS);
+    case 'hierarchical-adjoint-offsets'
+        parameters_res = getMultiStarts(parameters,@(xi)...
+            neglogLikelihood_JakStat_hierarchical_adjoint_offsets(xi,kappa,D,distribution,options),options.MS);
+    otherwise
+        parameters_res = getMultiStarts(parameters,@(xi) ...
+            neglogLikelihood_JakStat(xi,kappa,D,distribution,options),options.MS);
+end
 
+save(options.MS.foldername);
 end
