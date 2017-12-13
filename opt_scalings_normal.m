@@ -228,5 +228,5 @@ end
 % for all time points, if we for example want to use it in the standard way
 % with amici and adjoints
 % b = b(1,:,:,:);
-% c = c(1,:,:,:);
+c = c(1,:,:,:);
 % sigma2 = sigma2(1,:,:,:);

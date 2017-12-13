@@ -52,6 +52,14 @@ y(1) = offset_pSTAT + scale_pSTAT/init_STAT*(pSTAT + 2*pSTAT_pSTAT);
 y(2) = offset_tSTAT + scale_tSTAT/init_STAT*(STAT + pSTAT + 2*(pSTAT_pSTAT));
 y(3) = u(1);
 
+% VARIANCES
+
+model.sym.sigma_y = sym(size(model.sym.y));
+
+model.sym.sigma_y(1) = sigma_pSTAT;
+model.sym.sigma_y(2) = sigma_tSTAT;
+model.sym.sigma_y(3) = sigma_pEpoR;
+
 % SYSTEM STRUCT
 
 model.sym.x = x;

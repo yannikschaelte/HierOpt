@@ -1,4 +1,4 @@
-function [model] = jakstat_pesto_syms()
+function [model] = jakstat_hierarchical_syms()
 % jakstat_pesto_syms for examples/jakstat_signaling
 %
 % creates an amimodel-object for the AMICI solver
@@ -18,9 +18,9 @@ model.sym.x = [
     ];
 
 %% Parameters
-syms p1 p2 p3 p4 init_STAT Omega_cyt Omega_nuc sp1 sp2 sp3 sp4 sp5 offset_tSTAT offset_pSTAT scale_tSTAT scale_pSTAT sigma_pSTAT sigma_tSTAT sigma_pEpoR
+syms p1 p2 p3 p4 init_STAT Omega_cyt Omega_nuc sp1 sp2 sp3 sp4 sp5 offset_tSTAT offset_pSTAT
 
-model.sym.p = [p1,p2,p3,p4,init_STAT,sp1,sp2,sp3,sp4,sp5,offset_tSTAT,offset_pSTAT,scale_tSTAT,scale_pSTAT,sigma_pSTAT,sigma_tSTAT,sigma_pEpoR];
+model.sym.p = [p1,p2,p3,p4,init_STAT,sp1,sp2,sp3,sp4,sp5,offset_tSTAT,offset_pSTAT];
 model.param = 'log10';
 model.sym.k = [Omega_cyt,Omega_nuc];
 
@@ -50,15 +50,10 @@ model.sym.x0(1) = init_STAT;
 %% Observables
 model.sym.y = sym(zeros(3,1));
 
-model.sym.y(1) = offset_pSTAT + scale_pSTAT/init_STAT*(pSTAT + 2*pSTAT_pSTAT);
-model.sym.y(2) = offset_tSTAT + scale_tSTAT/init_STAT*(STAT + pSTAT + 2*(pSTAT_pSTAT));
+model.sym.y(1) = offset_pSTAT + 1/init_STAT*(pSTAT + 2*pSTAT_pSTAT);
+model.sym.y(2) = offset_tSTAT + 1/init_STAT*(STAT + pSTAT + 2*(pSTAT_pSTAT));
 model.sym.y(3) = u(1);
 
 %% Variances
-model.sym.sigma_y = sym(size(model.sym.y));
-
-model.sym.sigma_y(1) = sigma_pSTAT;
-model.sym.sigma_y(2) = sigma_tSTAT;
-model.sym.sigma_y(3) = sigma_pEpoR;
     
 end

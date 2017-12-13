@@ -157,6 +157,7 @@ catch error_thrown
     logL = nan;
     grad = nan(length(xi),1);
     fish = nan(length(xi),length(xi));
+    sol.status = -1;
 end
 if sol.status < 0
     warning('Failed to integrate ODE.')

@@ -4,7 +4,7 @@ function [] = run_estimation_JakStat(approach,distribution)
 % addpath(genpath('/home/icb/carolin.loos/PhD/AMICIGit'))
 % addpath(genpath('/home/icb/carolin.loos/PhD/HierarchicalOptimization'))
 
-load('data_JakStat.mat')
+load data_jakstat.mat
 [parameters,options] = getParameterOptions_JakStat(approach);
 
 kappa(1) = 1.4;% Omega_cyt
@@ -24,7 +24,7 @@ switch approach
     case 'hierarchical-adjoint-offsets'
         parameters_res = getMultiStarts(parameters,@(xi)...
             neglogLikelihood_JakStat_hierarchical_adjoint_offsets(xi,kappa,D,distribution,options),options.MS);
-    otherwise
+    case 'standard'
         parameters_res = getMultiStarts(parameters,@(xi) ...
             neglogLikelihood_JakStat(xi,kappa,D,distribution,options),options.MS);
 end

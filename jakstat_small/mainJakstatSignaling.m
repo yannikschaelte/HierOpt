@@ -51,7 +51,9 @@ rng(0);
 
 [exdir,~,~]=fileparts(which('mainJakstatSignaling.m'));
 try
-    amiwrap('jakstat_pesto','jakstat_pesto_syms', exdir, 1);
+    if ~exist('ami_jakstat_pesto.mexw64','file')
+        amiwrap('jakstat_pesto','jakstat_pesto_syms', exdir, 1);
+    end
 catch ME
     warning('There was a problem with the AMICI toolbox (available at https://github.com/ICB-DCM/AMICI), which is needed to run this example file. The original error message was:');
     rethrow(ME);
@@ -60,9 +62,10 @@ end
 %% Data
 % Experimental data is read out from an .xls-file and written to an AMICI
 % object which is used for the ODE integration
-datatable         = xlsread(fullfile(exdir,'pnas_data_original.xls'));
-amiData.t         = datatable(:,1);       % time points
-amiData.Y         = datatable(:,[2,4,6]); % measurement
+% datatable         = xlsread(fullfile(exdir,'pnas_data_original.xls'));
+load data_JakStat.mat
+amiData.t         = D.t;       % time points
+amiData.Y         = D.my; % measurement
 amiData.condition = [1.4,0.45];           % initial conditions
 amiData.Sigma_Y   = NaN(size(amiData.Y)); % preallocation of variances
 amiData           = amidata(amiData);     % calling the AMICI routine
@@ -86,12 +89,13 @@ parameters.name    = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)
     'log_{10}(\sigma_{pSTAT})','log_{10}(\sigma_{tSTAT})','log_{10}(\sigma_{pEpoR})'};
 
 % Initial guess for the parameters
+rng(1);
 par0 = bsxfun(@plus,parameters.min,bsxfun(@times,parameters.max ...
-       - parameters.min, lhsdesign(50,parameters.number,'smooth','off')'));
-parameters.guess = par0(:,1:50);
+       - parameters.min, lhsdesign(10,parameters.number,'smooth','off')'));
+parameters.guess = par0(:,1:10);
 
 % objective function
-objectiveFunction = @(theta) logLikelihoodJakstat(theta, amiData);
+objectiveFunction = @(theta) nllh_jakstat_standard(theta, amiData.condition, D);
 
 % PestoOptions
 optionsPesto          = PestoOptions();
@@ -121,7 +125,7 @@ optionsPesto.mode     = 'visual';
 
 
 % Multi-start local optimization part
-optionsPesto.n_starts = 25;
+optionsPesto.n_starts = 10;
 optionsPesto.localOptimizer = 'fmincon';
 optionsPesto.localOptimizerOptions = optimset(...
     'Algorithm', 'interior-point',...

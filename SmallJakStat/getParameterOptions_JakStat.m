@@ -18,7 +18,7 @@ options.MS.obj_type = 'negative log-posterior';
 load parameter_guesses_JakStat par0
 
 switch approach
-    case {'hierarchical','hierarchical-adjoint','hierarchical-adjoint-offsets'}
+    case {'hierarchical','hierarchical-adjoint'}
         parameters.name = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)',...
             'log_{10}(sp1)','log_{10}(sp2)','log_{10}(sp3)','log_{10}(sp4)','log_{10}(sp5)',...
             'log_{10}(offset_{tSTAT})','log_{10}(offset_{pSTAT})'};
@@ -32,6 +32,10 @@ switch approach
         options.llh.obs_groups.variance = {1,2,3};
         options.llh.obs_groups.proportionality = {1,2,3};
         
+    case 'hierarchical-adjoint-offsets'
+        parameters.name = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)',...
+            'log_{10}(sp1)','log_{10}(sp2)','log_{10}(sp3)','log_{10}(sp4)','log_{10}(sp5)'};
+        
     case 'standard'
         
         parameters.name = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)',...
@@ -39,7 +43,16 @@ switch approach
             'log_{10}(offset_{tSTAT})','log_{10}(offset_{pSTAT})',...
             'log_{10}(scale_{tSTAT})','log_{10}(scale_{pSTAT})',...
             'log_{10}(\sigma_{pSTAT})','log_{10}(\sigma_{tSTAT})','log_{10}(\sigma_{pEpoR})'};
-%         parameters.guess = par0(:,1:options.MS.n_starts);
+        
+        options.llh.obs(1).variance = 'multiple';
+        options.llh.obs(1).proportionality = 'multiple';
+        options.llh.obs(2).variance = 'multiple';
+        options.llh.obs(2).proportionality = 'multiple';
+        options.llh.obs(3).variance = 'multiple';
+        options.llh.obs(3).proportionality = 'absolute';
+        options.llh.obs_groups.variance = {1,2,3};
+        options.llh.obs_groups.proportionality = {1,2,3};
+        parameters.guess = par0(:,1:options.MS.n_starts);
 end
 
 parameters.number = length(parameters.name);
