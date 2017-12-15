@@ -2,8 +2,8 @@ function [ varargout ] = nllh_jakstat_hierarchical_adjoint(theta,kappa,D,scOptio
 
 amiOptions.rtol = 1e-12;
 amiOptions.atol = 1e-14;
-amiOptions.sensi_meth = 'forward';
-amiOptions.sensi = 1;
+amiOptions.sensi_meth = 'adjoint';
+amiOptions.sensi = 0;
 
 % for every experiment and replicate, do the optimization
 n_e = size(D,2);
@@ -22,14 +22,11 @@ for ie = 1:n_e
     end
     
     sim(ie).y = sol.y;
-    sim(ie).sy = sol.sy;
 end
 
 % optimal scalings
 
 [c,sigma2,c_by_y,sigma2_by_y] = opt_scalings_normal(sim,D,scOptions);
-
-[cost,grad] = nlLH_fgh(sim,D,'normal',scOptions);
 
 % nllh,snllh, s2nllh
 
@@ -51,9 +48,7 @@ switch nargout
         error('Only supports up to 3 outputs.');
 end
 
-amiOptions.sensi_meth = 'adjoint';
-
-% if nargout == 1
+if nargout == 1
 llh = 0;
     for ie = 1:n_e
         sigma2_e = sigma2(:,:,:,ie);
@@ -62,7 +57,7 @@ llh = 0;
         llh = llh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
             bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     end
-% else
+else
     for ie = 1:n_e
         n_r = size(D(ie).my,3);
         for ir = 1:n_r
@@ -96,12 +91,8 @@ llh = 0;
             end
         end
     end
-    fprintf('%.15f %.15f %.15f\n',varargout{1},cost,llh);
-    disp(mat2str(varargout{2}));
-    disp(mat2str(grad));
-% end
-
-varargout{1} = cost;
-varargout{2} = grad;
+%     fprintf('%.15f %.15f %.15f\n',varargout{1},cost,llh);
+%     disp(mat2str(varargout{2}));
+end
 
 end

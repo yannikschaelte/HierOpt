@@ -71,7 +71,7 @@ try
 
 
     if nargout > 1
-        [nlLH, gradnlLH] = nlLH_fgh(simulation,D,distr,options,save_pv);
+        [nlLH, gradnlLH,FIM] = nlLH_fgh(simulation,D,distr,options,save_pv);
         %posterior = likelihood * prior => -log(posterior) = -log(likelihood) - log(prior)
         if(nargin == 6)
             nlLH = nlLH + 0.5*sum(xi.^2)/prior2;
@@ -89,6 +89,7 @@ catch error_thrown
     warning(['Evaluation of likelihood failed. ',error_thrown.message]);
     nlLH = inf; 
     gradnlLH = zeros(length(xi),1);
+    FIM = zeros(length(xi));
 end
 
 switch nargout
@@ -99,6 +100,10 @@ switch nargout
         varargout{2} = gradnlLH;
 %         varargout{3} = dummy1;
 %         varargout{4} = dummy2;
+    case 3
+        varargout{1} = nlLH;
+        varargout{2} = gradnlLH;
+        varargout{3} = FIM;
 end
 
 end

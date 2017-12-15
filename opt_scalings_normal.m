@@ -144,9 +144,10 @@ for ie = 1:numel(options.exp_groups.proportionality)
                arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
             end
             
-%             b(:,ind_y,ind_r,ind_e) = opt_b_normal(arr_y,arr_h);
-%             b_by_y(:,iy,ind_r,ind_e) = tempb;
-            arr_b = zeros(size(arr_y));
+            tempb = opt_b_normal(arr_y,arr_h);
+            b(:,ind_y,ind_r,ind_e) = tempb;
+            b_by_y(:,iy,ind_r,ind_e) = tempb;
+%             arr_b = zeros(size(arr_y));
             
             % compute optimal cs
             tempc = opt_c_normal(arr_y,arr_h,arr_b);
@@ -227,6 +228,6 @@ end
 % for the further processing, only return one c, since c will be the same
 % for all time points, if we for example want to use it in the standard way
 % with amici and adjoints
-% b = b(1,:,:,:);
+b = b(1,:,:,:);
 c = c(1,:,:,:);
 % sigma2 = sigma2(1,:,:,:);
