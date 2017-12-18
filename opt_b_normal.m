@@ -16,14 +16,16 @@ arr_y = bsxfun(@times,~isnan(arr_h),arr_y);
 yh = nansum(bsxfun(@times,arr_y,arr_h));
 h2 = nansum(bsxfun(@power,arr_h,2));
 
-numerator = nansum(y-(yh/h2)*h)/count;
-denominator = 1 - nansum((nansum(h)/h2)*h)/count;
+numerator = nansum(arr_y-(yh/h2)*arr_h)/count;
+denominator = 1 - nansum((nansum(arr_h)/h2)*arr_h)/count;
 
 if abs(denominator) < eps
-    warning('hieropt:opt_b_normal', 'data not diverse enough to compute scalings this way');
+%     warning('hieropt:opt_b_normal', 'data not diverse enough to compute scalings this way');
+disp('HUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
+    b = 0;
+else
+    b = numerator / denominator;
 end
-
-b = numerator / denominator;
 
 end
 

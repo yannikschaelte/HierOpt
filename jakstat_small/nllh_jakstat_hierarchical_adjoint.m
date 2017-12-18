@@ -49,14 +49,15 @@ switch nargout
 end
 
 if nargout == 1
-llh = 0;
+nllh = 0;
     for ie = 1:n_e
         sigma2_e = sigma2(:,:,:,ie);
         c_e = c(:,:,:,ie);
         y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y));
-        llh = llh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
+        nllh = nllh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
             bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     end
+    varargout{1} = nllh;
 else
     for ie = 1:n_e
         n_r = size(D(ie).my,3);

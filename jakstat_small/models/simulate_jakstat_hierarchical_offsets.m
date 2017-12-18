@@ -1,13 +1,13 @@
-% simulate_jakstat.m is the matlab interface to the cvodes mex
+% simulate_jakstat_hierarchical_offsets.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
 %   this routine was generated using AMICI commit 5a39fd5749528be48ac212cab515c9025a3506a3 in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======
-% [...] = simulate_jakstat(tout,theta)
-% [...] = simulate_jakstat(tout,theta,kappa,data,options)
-% [status,tout,x,y,sx,sy] = simulate_jakstat(...)
+% [...] = simulate_jakstat_hierarchical_offsets(tout,theta)
+% [...] = simulate_jakstat_hierarchical_offsets(tout,theta,kappa,data,options)
+% [status,tout,x,y,sx,sy] = simulate_jakstat_hierarchical_offsets(...)
 %
 % INPUTS:
 % =======
@@ -93,7 +93,7 @@
 % sol.sy ... time-resolved output sensitivity vector
 % sol.z ... event output
 % sol.sz ... sensitivity of event output
-function varargout = simulate_jakstat(varargin)
+function varargout = simulate_jakstat_hierarchical_offsets(varargin)
 
 % DO NOT CHANGE ANYTHING IN THIS FILE UNLESS YOU ARE VERY SURE ABOUT WHAT YOU ARE DOING
 % MANUAL CHANGES TO THIS FILE CAN RESULT IN WRONG SOLUTIONS AND CRASHING OF MATLAB
@@ -109,7 +109,7 @@ else
     kappa=[];
 end
 
-if(length(theta)<17)
+if(length(theta)<10)
     error('provided parameter vector is too short');
 end
 
@@ -125,7 +125,10 @@ else
     options_ami = amioption();
 end
 if(isempty(options_ami.sens_ind))
-    options_ami.sens_ind = 1:17;
+    options_ami.sens_ind = 1:10;
+end
+if(options_ami.sensi>1)
+    error('Second order sensitivities were requested but not computed');
 end
 
 if(~isempty(options_ami.pbar))
@@ -147,10 +150,7 @@ switch (options_ami.pscale)
 end
 
 if(nargout>1)
-    if(nargout>6)
-        options_ami.sensi = 2;
-        options_ami.sensi_meth = 'forward';
-    elseif(nargout>4)
+    if(nargout>4)
         options_ami.sensi = 1;
         options_ami.sensi_meth = 'forward';
     else
@@ -161,11 +161,7 @@ nplist = length(options_ami.sens_ind); % MUST NOT CHANGE THIS VALUE
 if(nplist == 0)
     options_ami.sensi = 0;
 end
-if(options_ami.sensi > 1)
-    nxfull = 162;
-else
-    nxfull = 9;
-end
+nxfull = 9;
 if(isempty(options_ami.qpositivex))
     options_ami.qpositivex = zeros(nxfull,1);
 else
@@ -206,7 +202,7 @@ end
 if(not(length(tout)==length(unique(tout))))
     error('Provided time vector has non-unique entries!!');
 end
-if(max(options_ami.sens_ind)>17)
+if(max(options_ami.sens_ind)>10)
     error('Sensitivity index exceeds parameter dimension!')
 end
 if(length(kappa)<2)
@@ -231,48 +227,7 @@ if(~isempty(options_ami.sx0))
     end
     init.sx0 = bsxfun(@times,options_ami.sx0,1./permute(chainRuleFactor(:),[2,1]));
 end
-if(options_ami.sensi<2)
-    sol = ami_jakstat(tout,theta(1:17),kappa(1:2),options_ami,plist,pbar(plist+1),xscale,init,data);
-else
-    sol = ami_jakstat_o2(tout,theta(1:17),kappa(1:2),options_ami,plist,pbar(plist+1),xscale,init,data);
-end
-if(options_ami.sensi == 2)
-    if(~(options_ami.sensi_meth==2))
-        sz = zeros(size(sol.z,1),0,length(theta(options_ami.sens_ind)));
-        ssigmaz = zeros(size(sol.z,1),0,length(theta(options_ami.sens_ind)));
-        srz = zeros(size(sol.z,1),0,length(theta(options_ami.sens_ind)));
-        for iz = 1:0
-            sz(:,iz,:) = sol.sz(:,2*iz-1,:);
-            ssigmaz(:,iz,:) = sol.ssigmaz(:,2*iz-1,:);
-            srz(:,iz,:) = sol.srz(:,2*iz-1,:);
-        end
-        sol.s2x = reshape(sol.sx(:,10:end,:),length(tout),9,17,length(options_ami.sens_ind));
-        sol.s2y = reshape(sol.sy(:,4:end,:),length(tout),3,17,length(options_ami.sens_ind));
-        sol.s2sigmay = reshape(sol.ssigmay(:,4:end,:),length(tout),3,17,length(options_ami.sens_ind));
-        s2z = zeros(size(sol.z,1),0,17,length(options_ami.sens_ind));
-        s2sigmaz = zeros(size(sol.z,1),0,17,length(options_ami.sens_ind));
-        s2rz = zeros(size(sol.z,1),0,17,length(options_ami.sens_ind));
-        for iz = 1:0
-            sol.s2z(:,iz,:,:) = reshape(sol.sz(:,((iz-1)*(17+1)+2):((iz-1)*(17+1)+17+1),:),options_ami.nmaxevent,1,17,length(options_ami.sens_ind));
-            sol.s2sigmaz(:,iz,:,:) = reshape(sol.ssigmaz(:,((iz-1)*(17+1)+2):((iz-1)*(17+1)+17+1),:),options_ami.nmaxevent,1,17,length(options_ami.sens_ind));
-            sol.s2rz(:,iz,:,:) = reshape(sol.srz(:,((iz-1)*(17+1)+2):((iz-1)*(17+1)+17+1),:),options_ami.nmaxevent,1,17,length(options_ami.sens_ind));
-        end
-        sol.sx = sol.sx(:,1:9,:);
-        sol.sy = sol.sy(:,1:3,:);
-        sol.ssigmay = sol.ssigmay(:,1:3,:);
-        if(iz>0)
-            sol.sz = sz;
-            sol.ssigmaz = ssigmaz;
-            sol.srz = srz;
-         end
-    end
-    sol.x = sol.x(:,1:9);
-    sol.y = sol.y(:,1:3);
-    sol.sigmay = sol.sigmay(:,1:3);
-    sol.z = sol.z(:,1:0);
-    sol.rz = sol.rz(:,1:0);
-    sol.sigmaz = sol.sigmaz(:,1:0);
-end
+sol = ami_jakstat_hierarchical_offsets(tout,theta(1:10),kappa(1:2),options_ami,plist,pbar(plist+1),xscale,init,data);
 if(nargout>1)
     varargout{1} = sol.status;
     varargout{2} = sol.t;
@@ -281,10 +236,6 @@ if(nargout>1)
     if(nargout>4)
         varargout{5} = sol.sx;
         varargout{6} = sol.sy;
-        if(nargout>6)
-            varargout{7} = sol.s2x;
-            varargout{8} = sol.s2y;
-        end
     end
 else
     varargout{1} = sol;

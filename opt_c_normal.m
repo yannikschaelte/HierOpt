@@ -16,7 +16,7 @@ end
 arr_h = bsxfun(@times,~isnan(arr_y),arr_h);
 arr_y = bsxfun(@times,~isnan(arr_h),arr_y);
 
-yh = nansum(bsxfun(@times,arr_y,arr_h));
+yh = nansum(bsxfun(@times,arr_y-arr_b,arr_h));
 h2 = nansum(bsxfun(@power,arr_h,2));
 
 c = yh / h2;

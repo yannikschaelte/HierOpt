@@ -1,4 +1,4 @@
-function [ varargout ] = nllh_jakstat_hierarchical_adjoint(theta,kappa,D,scOptions)
+function [ varargout ] = nllh_jakstat_hierarchical_adjoint_offsets(theta,kappa,D,scOptions)
 
 amiOptions.rtol = 1e-12;
 amiOptions.atol = 1e-14;
@@ -13,9 +13,9 @@ n_e = size(D,2);
 sim = struct([]);
 for ie = 1:n_e
     
-    kappa_e = [kappa(:,ie); 1; 1];
+    kappa_e = [kappa(:,ie); 0; 0; 1; 1];
     
-    sol = simulate_jakstat_hierarchical_adjoint(D(ie).t,theta,kappa_e,[],amiOptions);
+    sol = simulate_jakstat_hierarchical_adjoint_offsets(D(ie).t,theta,kappa_e,[],amiOptions);
     
     if (sol.status ~= 0)
         error('Could not integrate ODE.');
@@ -26,7 +26,7 @@ end
 
 % optimal scalings
 
-[c,sigma2,c_by_y,sigma2_by_y] = opt_scalings_normal(sim,D,scOptions);
+[c,sigma2,c_by_y,sigma2_by_y,b,b_by_y] = opt_scalings_normal(sim,D,scOptions);
 
 % nllh,snllh, s2nllh
 
@@ -53,7 +53,8 @@ llh = 0;
     for ie = 1:n_e
         sigma2_e = sigma2(:,:,:,ie);
         c_e = c(:,:,:,ie);
-        y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y));
+        b_e = b(:,:,:,ie);
+        y_ch = bsxfun(@minus,D(ie).my,bsxfun(@add,bsxfun(@times,c_e,sim(ie).y),b_e));
         llh = llh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
             bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     end
@@ -66,11 +67,14 @@ else
             c_re = c_by_y(:,:,ir,ie);
             c_re = reshape(c_re,[],1);
             
+            b_re = b_by_y(:,:,ir,ie);
+            b_re = reshape(b_re,[],1);
+            
             sigma2_re = sigma2_by_y(:,:,ir,ie);
             sigma2_re = reshape(sigma2_re,1,[]);
             sigma2_re = repmat(sigma2_re,length(D(ie).t),1);
             
-            kappa_re = [kappa(:,ie); c_re(1:2)];
+            kappa_re = [kappa(:,ie); b_re(1:2); c_re(1:2)];
             
             amiData.t = D(ie).t;
             amiData.Y = D(ie).my(:,:,ir);
@@ -78,7 +82,7 @@ else
             amiData.condition = kappa_re;
             amiData = amidata(amiData);
             
-            sol = simulate_jakstat_hierarchical_adjoint(D(ie).t,theta,kappa_re,amiData,amiOptions);
+            sol = simulate_jakstat_hierarchical_adjoint_offsets(D(ie).t,theta,kappa_re,amiData,amiOptions);
             
             if sol.status ~= 0
                 error('Could not integrate ODE.');
