@@ -22,7 +22,7 @@ count = sum(~isnan(arr_y));
 arr_h = bsxfun(@times,~isnan(arr_y),arr_h);
 arr_y = bsxfun(@times,~isnan(arr_h),arr_y);
 
-y_ch = bsxfun(@minus,arr_y,bsxfun(@times,arr_c,arr_h));
+y_ch = bsxfun(@minus,arr_y,bsxfun(@times,arr_c,arr_h)+arr_b);
 
 numerator = nansum(bsxfun(@power,y_ch,2));
 

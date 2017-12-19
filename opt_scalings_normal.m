@@ -89,8 +89,6 @@ else
     end
 end
 
-distr = 'normal';
-
 % initialization of proportionality and variance parameters
 % we return a single (c,sigma2) for every y,r,e (might return only one for
 % every obs_group), since the adjoint computations will be possible only
@@ -128,6 +126,8 @@ for ie = 1:numel(options.exp_groups.proportionality)
             case 'absolute'
                 c(:,ind_y,:,ind_e) = 1;
                 c_by_y(:,iy,:,ind_e) = 1;
+                b(:,ind_y,:,ind_e) = 0;
+                b_by_y(:,iy,:,ind_e) = 0;
                 continue;
             otherwise
                 error('could not resolve input');
@@ -148,6 +148,7 @@ for ie = 1:numel(options.exp_groups.proportionality)
             b(:,ind_y,ind_r,ind_e) = tempb;
             b_by_y(:,iy,ind_r,ind_e) = tempb;
 %             arr_b = zeros(size(arr_y));
+            arr_b = tempb*ones(size(arr_y));
             
             % compute optimal cs
             tempc = opt_c_normal(arr_y,arr_h,arr_b);
@@ -194,14 +195,17 @@ for ie = 1:numel(options.exp_groups.variance)
             arr_y = [];
             arr_h = [];
             arr_c = [];
+            arr_b = [];
             for je = ind_e
                arr_y = [arr_y reshape(data(je).my(:,ind_y,ind_r),1,[])];
                arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
                arr_c = [arr_c reshape(c(:,ind_y,ind_r,je),1,[])];
+               arr_b = [arr_b reshape(b(:,ind_y,ind_r,je),1,[])];
             end
             
 %             arr_c = c(:,ind_y,ind_r,ind_e);
-            arr_c = reshape(arr_c,1,[]);
+%             arr_c = reshape(arr_c,1,[]);
+% arr_b = zeros(size(arr_c));
             
             % compute optimal cs
             tempsigma2 = opt_sigma2_normal(arr_y,arr_h,arr_c,arr_b);

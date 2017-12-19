@@ -54,8 +54,27 @@ switch approach
         options.sc.obs_groups.variance = {1,2,3};
         options.sc.obs_groups.proportionality = {1,2,3};
         
+    case 'hierarchical-offsets'
+        nPar = 10;
+        options.sc.obs(1).variance = 'multiple';
+        options.sc.obs(1).proportionality = 'multiple';
+        options.sc.obs(2).variance = 'multiple';
+        options.sc.obs(2).proportionality = 'multiple';
+        options.sc.obs(3).variance = 'multiple';
+        options.sc.obs(3).proportionality = 'absolute';
+        options.sc.obs_groups.variance = {1,2,3};
+        options.sc.obs_groups.proportionality = {1,2,3};
+        
     case 'hierarchical-adjoint-offsets'
         nPar = 10;
+        options.sc.obs(1).variance = 'multiple';
+        options.sc.obs(1).proportionality = 'multiple';
+        options.sc.obs(2).variance = 'multiple';
+        options.sc.obs(2).proportionality = 'multiple';
+        options.sc.obs(3).variance = 'multiple';
+        options.sc.obs(3).proportionality = 'absolute';
+        options.sc.obs_groups.variance = {1,2,3};
+        options.sc.obs_groups.proportionality = {1,2,3};
 end
 
 parameters.number = nPar;
