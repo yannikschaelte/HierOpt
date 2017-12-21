@@ -1,7 +1,7 @@
 % simulate_JakStat.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit 805585fa42ebb2c76e6ec281cde6df9e983aaa80 in branch master in repo https://github.com/icb-dcm/amici.
+%   this routine was generated using AMICI commit # in branch unknown branch in repo unknown repository.
 %
 % USAGE:
 % ======
@@ -109,7 +109,7 @@ else
     kappa=[];
 end
 
-if(length(theta)<13)
+if(length(theta)<17)
     error('provided parameter vector is too short');
 end
 
@@ -125,7 +125,7 @@ else
     options_ami = amioption();
 end
 if(isempty(options_ami.sens_ind))
-    options_ami.sens_ind = 1:13;
+    options_ami.sens_ind = 1:17;
 end
 if(options_ami.sensi>1)
     error('Second order sensitivities were requested but not computed');
@@ -161,7 +161,7 @@ nplist = length(options_ami.sens_ind); % MUST NOT CHANGE THIS VALUE
 if(nplist == 0)
     options_ami.sensi = 0;
 end
-nxfull = 8;
+nxfull = 9;
 if(isempty(options_ami.qpositivex))
     options_ami.qpositivex = zeros(nxfull,1);
 else
@@ -202,10 +202,10 @@ end
 if(not(length(tout)==length(unique(tout))))
     error('Provided time vector has non-unique entries!!');
 end
-if(max(options_ami.sens_ind)>13)
+if(max(options_ami.sens_ind)>17)
     error('Sensitivity index exceeds parameter dimension!')
 end
-if(length(kappa)<3)
+if(length(kappa)<2)
     error('provided condition vector is too short');
 end
 init = struct();
@@ -227,7 +227,7 @@ if(~isempty(options_ami.sx0))
     end
     init.sx0 = bsxfun(@times,options_ami.sx0,1./permute(chainRuleFactor(:),[2,1]));
 end
-sol = ami_JakStat(tout,theta(1:13),kappa(1:3),options_ami,plist,pbar(plist+1),xscale,init,data);
+sol = ami_JakStat(tout,theta(1:17),kappa(1:2),options_ami,plist,pbar(plist+1),xscale,init,data);
 if(nargout>1)
     varargout{1} = sol.status;
     varargout{2} = sol.t;

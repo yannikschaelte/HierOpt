@@ -1,7 +1,7 @@
 function [parameters,options] = getParameterOptions_JakStat(approach)
 
 options.MS = PestoOptions();
-options.MS.n_starts = 20; %actually 500
+options.MS.n_starts = 100; %actually 500
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
@@ -38,7 +38,7 @@ switch approach
         
     case 'standard'
         
-        parameters.name = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)',...
+        parameters.name = {'log_{10}(p1)','log_{10}(p2)','log_{10}(p3)','log_{10}(p4)','log_{10}(initSTAT)',...
             'log_{10}(sp1)','log_{10}(sp2)','log_{10}(sp3)','log_{10}(sp4)','log_{10}(sp5)',...
             'log_{10}(offset_{tSTAT})','log_{10}(offset_{pSTAT})',...
             'log_{10}(scale_{tSTAT})','log_{10}(scale_{pSTAT})',...
@@ -52,10 +52,10 @@ switch approach
         options.llh.obs(3).proportionality = 'absolute';
         options.llh.obs_groups.variance = {1,2,3};
         options.llh.obs_groups.proportionality = {1,2,3};
-        parameters.guess = par0(:,1:options.MS.n_starts);
+%         parameters.guess = par0(:,1:options.MS.n_starts);
 end
 
-parameters.number = length(parameters.name);
+parameters.number = 17;%length(parameters.name);
 parameters.min = -5*ones(parameters.number,1);
 parameters.max = 3*ones(parameters.number,1);
 parameters.max(4) = 6;

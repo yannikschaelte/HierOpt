@@ -145,4 +145,4 @@ if options.title
     title('all estimates');
 end
 
-% ylim([-150,Inf]);
+ylim([0,Inf]);

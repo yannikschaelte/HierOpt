@@ -1,8 +1,8 @@
 close all;
 
-load results_SmallJakStat_standard_normal.mat
+load results_standard.mat
 pam_std = parameters_res;
-load results_SmallJakStat_hierarchical_normal.mat
+load results_hierarchical.mat
 pam_h = parameters_res;
 
 % simulate
@@ -16,7 +16,7 @@ pam_h = parameters_res;
 % figure;
 % plot(sol.y(1,:));
 
-load data/data_JakStat.mat
+load data/data_jakstat.mat
 
 arr_pams = {pam_std,pam_h};%,pam_ha,pam_ha2};
 identifiers = {'standard','hierarchical'};
@@ -30,17 +30,17 @@ for j = 1:length(arr_pams)
     arr_mean(j) = mean(arr_pams{j}.MS.t_cpu);
     arr_std(j) = std(arr_pams{j}.MS.t_cpu);
     t_cpu(:,j) = arr_pams{j}.MS.t_cpu;
-    nConvergedStarts(1,j) = sum(arr_pams{j}.MS.logPost > -52);
+    nConvergedStarts(1,j) = sum(arr_pams{j}.MS.logPost > 73);
 end
 
 figure;
-b = bar(nConvergedStarts/500*100);
+b = bar(nConvergedStarts/100*100);
 xticklabels({'standard','hierarchical'});
 ylabel('converged starts [%]');
 title('Converged starts');
 
 figure;
-boxplot(t_cpu,'DataLim',[0,200]);
+boxplot(t_cpu,'DataLim',[0,50]);
 xticklabels({'standard','hierarchical'});
 ylabel('time [s]');
 title('CPU time per start');
