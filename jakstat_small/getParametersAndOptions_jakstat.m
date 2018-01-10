@@ -1,6 +1,6 @@
 function [parameters,options] = getParametersAndOptions_jakstat(approach)
 
-nStarts = 100;
+nStarts = 20;
 
 options.MS = PestoOptions();
 options.MS.n_starts = nStarts; %actually 500
@@ -45,6 +45,11 @@ switch approach
     
     case 'hierarchical'
         nPar = 12;
+        options.sc.sigma2.exp_groups(1).idxs = {1};
+        options.sc.sigma2.exp_groups(1).obs_groups(1).idxs = {1};
+        options.sc.sigma2.exp_groups(1).obs_Grou
+        options.sc.exp_groups(1).
+        
         options.sc.obs(1).variance = 'multiple';
         options.sc.obs(1).proportionality = 'multiple';
         options.sc.obs(2).variance = 'multiple';

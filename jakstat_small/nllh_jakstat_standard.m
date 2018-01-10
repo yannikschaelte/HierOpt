@@ -2,7 +2,7 @@ function [ varargout ] = nllh_jakstat_standard(theta, kappa, D)
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
-amiOptions.sensi_meth = 'adjoint';
+amiOptions.sensi_meth = 'forward';
 
 % for every experiment and replicate, do the optimization
 n_e = size(D,2);

@@ -1,7 +1,7 @@
 % simulate_jakstat_hierarchical_adjoint.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit 5a39fd5749528be48ac212cab515c9025a3506a3 in branch master in repo https://github.com/icb-dcm/amici.
+%   this routine was generated using AMICI commit # in branch unknown branch in repo unknown repository.
 %
 % USAGE:
 % ======

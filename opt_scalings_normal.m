@@ -1,63 +1,4 @@
 function [ c,sigma2,c_by_y,sigma2_by_y,b,b_by_y ] = opt_scalings_normal(sim,data,options)
-% This function computes the value of the negative-log-likelihood function,
-% its gradient and its Hessian at theta
-%
-% USAGE:
-% [...]                     = nlLH_fgh(simulation,D,'normal')
-% [...]                     = nlLH_fgh(simulation,D,'normal',options,1)
-% [nllH]                    = nlLH_fgh(...)
-% [nllH,gradnlLH]           = nlLH_fgh(...)
-% [nllH,gradnlLH,FIMnlLH]   = nlLH_fgh(...)
-%
-% Parameters:
-%   simulation: (1 x #experiments) struct with fields
-%       * y: simulation of the output for the different experiments for a theta
-%            in which the values nlLH, gradnlLH, FIMnlLH will be computed
-%       * sy: simulation of sy, the sensitivities of the output vector, for the different experiments
-%            for a theta in which the values nlLH, gradnlLH, FIMnlLH will be computed
-%   D: (1 x #experiments) struct containing data with two fields
-%       * t: time points
-%       * my: number time points x number observables x number replicates
-%   distr: indicates distribution of measurement noise,
-%         = 'normal'
-%         = 'laplace'
-%         = 'log-normal'
-%         = 'log-laplace'
-%   options.exp_groups:
-%               * variance: struct with each struct containing the indices
-%                   of the experiments that share a variance parameter
-%               * proportionality: struct with each struct containing the indices
-%                   of the experiments that share a proportionality parameter
-%   options.obs_groups:
-%               * variance: struct with each struct containing the indices
-%                   of the observables that share a variance parameter
-%               * proportionality: struct with each struct containing the indices
-%                   of the observables that share a proportionality parameter
-%    (the defaults for the above options are that all parameters are shared
-%    across observables and experiments)
-%   options.obs: (1 x #observables) struct with fields
-%               * variance:
-%                           = 'single': the variance is computed for all replicate together
-%                           = 'multiple': the variance is computed for each replicate separately
-%               * proportionality:
-%                           = 'single': proportionality factor is computed
-%                                   for all replicates together
-%                           = 'multiple': proportionality factor is
-%                                   computed for each replicate separately
-%                           = 'absolute': proportionality factor is 1
-%   save_pv: indicates whether the proportionality factors and variances are
-%            saved in a .mat file (1) or not (0)
-%
-% Return values:
-%   nlLh: value of the negative-log-likelihood function in theta
-%   gradnlLH: value of gradient of the negative-log-likelihood function
-%                 in theta
-%   FIMnlLH: approximation of the Hessian of the negative-log-likelihood function in theta
-%            using the FIM
-%
-% Note: all oberservables/experiments that share a proportionality parameter
-%       need to also share the variance parameter!
-%
 %% INITIALIZATION
 
 n_e = size(data,2); %number of experiments
@@ -144,7 +85,7 @@ for ie = 1:numel(options.exp_groups.proportionality)
                arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
             end
             
-            tempb = opt_b_normal(arr_y,arr_h);
+            tempb = 0;%opt_b_normal(arr_y,arr_h);
             b(:,ind_y,ind_r,ind_e) = tempb;
             b_by_y(:,iy,ind_r,ind_e) = tempb;
 %             arr_b = zeros(size(arr_y));
