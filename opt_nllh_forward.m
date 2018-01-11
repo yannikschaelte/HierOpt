@@ -12,7 +12,7 @@ function [ varargout ] = opt_nllh_forward( sim, D, b, c, sigma2 )
 % History:
 % 2018/01/10 Yannik Schaelte
 
-n_e = size(D,2);
+ne = size(D,2);
 if nargout > 1
     n_theta = size(sim(1).sy,3);
 end
@@ -26,12 +26,12 @@ if nargout > 1
 end
 
 
-for ie = 1:n_e
-    n_r = size(D(ie).my,3);
+for ie = 1:ne
+    nr = size(D(ie).my,3);
     
-    b_e = b(:,:,:,ie);
-    c_e = c(:,:,:,ie);
-    sigma2_e = sigma2(:,:,:,ie);
+    b_e = b{ie};
+    c_e = c{ie};
+    sigma2_e = sigma2{ie};
     
     y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y)+b_e);
     
@@ -39,7 +39,7 @@ for ie = 1:n_e
         bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     
     if nargout > 1
-        dy_ch = - bsxfun(@times,permute(c_e,[1,2,4,3]),repmat(sim(ie).sy,[1,1,1,n_r]));
+        dy_ch = - bsxfun(@times,permute(c_e,[1,2,4,3]),repmat(sim(ie).sy,[1,1,1,nr]));
         
         grad = grad + permute(sum(sum(nansum(...
             bsxfun(@times,permute(...

@@ -1,7 +1,14 @@
-function [ c ] = opt_c_normal( arr_y, arr_h, arr_b )
+function [ c ] = opt_c_normal( arr_y, arr_h, arr_b, c_mode )
 % [t,y,r,e]
 % assumptions: resolution(b) = resolution(c), resolution(b) \supset
 % resolution(sigma2)
+
+if strcmp(c_mode,'absolute')
+    c = 1;
+    return;
+end
+
+% else compute optimal c
 
 arr_y = reshape(arr_y,1,[]);
 arr_h = reshape(arr_h,1,[]);

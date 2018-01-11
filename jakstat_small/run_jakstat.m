@@ -3,6 +3,7 @@ function [  ] = run_jakstat(approach)
 load('data_jakstat','D');
 kappa = [1.4; 0.45]; % omega_cyt, omega_nuc
 
+exdir=fileparts(which('run_jakstat.m'));
 [parameters,options] = getParametersAndOptions_jakstat(approach);
 
 switch approach
@@ -22,7 +23,7 @@ end
 
 parameters_res = getMultiStarts(parameters,nllh,options.MS);
 
-save(['results_' approach '.mat']);
+save(fullfile(exdir,['results_' approach '.mat']));
 
 end
 

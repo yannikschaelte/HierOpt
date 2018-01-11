@@ -34,41 +34,51 @@ switch approach
         
     case 'hierarchical-adjoint'
         nPar = 12;
-        options.sc.obs(1).variance = 'multiple';
-        options.sc.obs(1).proportionality = 'multiple';
-        options.sc.obs(2).variance = 'multiple';
-        options.sc.obs(2).proportionality = 'multiple';
-        options.sc.obs(3).variance = 'multiple';
-        options.sc.obs(3).proportionality = 'absolute';
-        options.sc.obs_groups.variance = {1,2,3};
-        options.sc.obs_groups.proportionality = {1,2,3};
-    
+        
+        sc.exp_groups.bc_idxs = {1};
+        sc.exp_groups.sigma2_idxs = {1};
+        
+        sc.obs_groups.bc_idxs = {1,2,3};
+        sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
+        sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
+        sc.obs_groups.sigma2_idxs = {1,2,3};
+        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        
+        sc.distribution = 'normal';
+        
+        options.sc = sc;
+        
     case 'hierarchical'
         nPar = 12;
-        options.sc.sigma2.exp_groups(1).idxs = {1};
-        options.sc.sigma2.exp_groups(1).obs_groups(1).idxs = {1};
-        options.sc.sigma2.exp_groups(1).obs_Grou
-        options.sc.exp_groups(1).
         
-        options.sc.obs(1).variance = 'multiple';
-        options.sc.obs(1).proportionality = 'multiple';
-        options.sc.obs(2).variance = 'multiple';
-        options.sc.obs(2).proportionality = 'multiple';
-        options.sc.obs(3).variance = 'multiple';
-        options.sc.obs(3).proportionality = 'absolute';
-        options.sc.obs_groups.variance = {1,2,3};
-        options.sc.obs_groups.proportionality = {1,2,3};
+        sc.exp_groups.bc_idxs = {1};
+        sc.exp_groups.sigma2_idxs = {1};
+        
+        sc.obs_groups.bc_idxs = {1,2,3};
+        sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
+        sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
+        sc.obs_groups.sigma2_idxs = {1,2,3};
+        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        
+        sc.distribution = 'normal';
+        
+        options.sc = sc;
         
     case 'hierarchical-offsets'
         nPar = 10;
-        options.sc.obs(1).variance = 'multiple';
-        options.sc.obs(1).proportionality = 'multiple';
-        options.sc.obs(2).variance = 'multiple';
-        options.sc.obs(2).proportionality = 'multiple';
-        options.sc.obs(3).variance = 'multiple';
-        options.sc.obs(3).proportionality = 'absolute';
-        options.sc.obs_groups.variance = {1,2,3};
-        options.sc.obs_groups.proportionality = {1,2,3};
+
+        sc.exp_groups.bc_idxs = {1};
+        sc.exp_groups.sigma2_idxs = {1};
+        
+        sc.obs_groups.bc_idxs = {1,2,3};
+        sc.obs_groups.b_mode = {'multiple','multiple','absolute'};
+        sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
+        sc.obs_groups.sigma2_idxs = {1,2,3};
+        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        
+        sc.distribution = 'normal';
+        
+        options.sc = sc;
         
     case 'hierarchical-adjoint-offsets'
         nPar = 10;

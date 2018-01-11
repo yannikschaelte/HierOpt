@@ -42,15 +42,15 @@ for ie = 1:n_e
     end
 end
 
-[ c,sigma2,c_by_y,sigma2_by_y,b,b_by_y ] = opt_scalings_normal(sim,D,scOptions);
+[ b,c,sigma2 ] = opt_scalings(sim,D,scOptions);
 
 if nargout == 1
-    nllh = opt_nllh( D, sim, b, c, sigma2 );
+    nllh = opt_nllh_forward(sim,D,b,c,sigma2);
     varargout{1} = nllh;
 else
-    [nllh,snllh] = opt_nllh( D, sim, b, c, sigma2 );
+    [nllh,grad] = opt_nllh_forward(sim,D,b,c,sigma2);
     varargout{1} = nllh;
-    varargout{2} = snllh;
+    varargout{2} = grad;
 end
 
 end

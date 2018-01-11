@@ -28,7 +28,7 @@ for ie = 1:n_e
     end
 end
 
-[c,sigma2,~,~,b] = opt_scalings_normal(sim,D,scOptions);
+[b,c,sigma2] = opt_scalings(sim,D,scOptions);
 
 switch nargout
     case 1
