@@ -1,4 +1,4 @@
-function [ b ] = opt_b_normal( arr_y, arr_h, b_mode, c_mode )
+function [ b ] = hieropt_b_normal( arr_y, arr_h, b_mode, c_mode )
 % [t,y,r,e]
 % assumptions: resolution(b) = resolution(c), resolution(b) \supset
 % resolution(sigma2)

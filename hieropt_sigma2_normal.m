@@ -1,4 +1,4 @@
-function [ sigma2 ] = opt_sigma2_normal( arr_y, arr_h, arr_c, arr_b )
+function [ sigma2 ] = hieropt_sigma2_normal( arr_y, arr_h, arr_c, arr_b )
 
 arr_y = reshape(arr_y,1,[]);
 arr_h = reshape(arr_h,1,[]);

@@ -1,16 +1,30 @@
-function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = opt_scalings(sim,data,scOptions)
-% INPUT
-% scOptions:
-%   .exp_groups
-%     .bc_idxs
-%     .sigma2_idxs
-%   .obs_groups
-%     .bc_idxs
-%     .bc_mode       : 'multiple','single','absolute'
-%     .sigma2_idxs   
-%     .sigma2_mode   : 'multiple','single','absolute','user-specified'
-%     .sigma2_values : used if sigma2_mode='user-specified', must be of
-%                      fitting dimensions
+function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,data,scOptions)
+% hieropt_scalings computes the optimal scalings (b,c,sigma2).
+%
+% Parameters:
+%   scOptions:
+%     .exp_groups
+%       .bc_idxs
+%       .sigma2_idxs
+%     .obs_groups
+%       .bc_idxs
+%       .bc_mode       : 'multiple','single','absolute'
+%       .sigma2_idxs   
+%       .sigma2_mode   : 'multiple','single','absolute'
+%
+% Return Values:
+%   b
+%   c
+%   sigma2
+%   b_by_y
+%   c_by_y
+%   sigma2_by_y
+% 
+% History:
+%   2018/01/12: Yannik Schaelte
+
+% TODO we can also have user-defined sigma2s, giving different formulas for
+% the other scalings
 
 %% PRELIMINARIES
 
@@ -33,6 +47,24 @@ n_expGroups_sigma2 = numel(scOptions.exp_groups.sigma2_idxs);
 n_obsGroups_bc     = numel(scOptions.obs_groups.bc_idxs);
 n_obsGroups_sigma2 = numel(scOptions.obs_groups.sigma2_idxs);
 
+% compute numbers of not-absolute groups
+n_obsGroups_notabs_b = 0;
+n_obsGroups_notabs_c = 0;
+n_obsGroups_notabs_sigma2 = 0;
+for iyg = 1:n_obsGroups_bc
+    if ~strcmp(scOptions.obs_groups.b_mode{iyg},'absolute')
+        n_obsGroups_notabs_b = n_obsGroups_notabs_b + 1;
+    end
+    if ~strcmp(scOptions.obs_groups.c_mode{iyg},'absolute')
+        n_obsGroups_notabs_c = n_obsGroups_notabs_c + 1;
+    end
+end
+for iyg = 1:n_obsGroups_sigma2
+    if ~strcmp(scOptions.obs_groups.sigma2_mode{iyg},'absolute')
+        n_obsGroups_notabs_sigma2 + n_obsGroups_notabs_sigma2 + 1;
+    end
+end
+
 b = cell(ne,1);
 c = cell(ne,1);
 sigma2 = cell(ne,1);
@@ -49,9 +81,9 @@ for ie = 1:ne
     c{ie} = ones(nt,ny,nr);
     sigma2{ie} = ones(nt,ny,nr);
 
-    b_by_y{ie} = zeros(n_obsGroups_bc,nr);
-    c_by_y{ie} = ones(n_obsGroups_bc,nr);
-    sigma2_by_y{ie} = ones(n_obsGroups_sigma2,nr);
+    b_by_y{ie} = zeros(nt,n_obsGroups_notabs_b,nr);
+    c_by_y{ie} = ones(nt,n_obsGroups_notabs_c,nr);
+    sigma2_by_y{ie} = ones(nt,n_obsGroups_notabs_sigma2,nr);
 end
 
 %% OPTIMAL VALUES FOR THE PROPORTIONALITIES AND OFFSETS
@@ -60,6 +92,9 @@ for ieg = n_expGroups_bc
     
     ind_e = scOptions.exp_groups.bc_idxs{ieg};
     nr = size(data(ind_e(1)).my,3);
+    
+    i_obsGroups_notabs_b = 1;
+    i_obsGroups_notabs_c = 1;
     
     for iyg = 1:n_obsGroups_bc
         
@@ -99,18 +134,24 @@ for ieg = n_expGroups_bc
             end
             
             % compute optimal b
-            tmp_b = opt_b_normal(arr_y,arr_h,b_mode,c_mode);
+            tmp_b = hieropt_b_normal(arr_y,arr_h,b_mode,c_mode);
             for ie = ind_e
                 b{ie}(:,ind_y,ind_r) = tmp_b;
-                b_by_y{ie}(:,iyg,ind_r) = tmp_b;
+                if ~strcmp(b_mode,'absolute')
+                    b_by_y{ie}(:,i_obsGroups_notabs_b,ind_r) = tmp_b;
+                    i_obsGroups_notabs_b = i_obsGroups_notabs_b + 1;
+                end
             end
             arr_b = tmp_b*ones(size(arr_y));
             
             % compute optimal c
-            tmp_c = opt_c_normal(arr_y,arr_h,arr_b,c_mode);
+            tmp_c = hieropt_c_normal(arr_y,arr_h,arr_b,c_mode);
             for ie = ind_e
                 c{ie}(:,ind_y,ind_r) = tmp_c;
-                c_by_y{ie}(:,iyg,ind_r) = tmp_c;
+                if ~strcmp(c_mode,'absolute')
+                    c_by_y{ie}(:,i_obsGroups_notabs_c,ind_r) = tmp_c;
+                    i_obsGroups_notabs_c = i_obsGroups_notabs_c + 1;
+                end
             end
         end
         
@@ -163,7 +204,7 @@ for ieg = 1:n_expGroups_sigma2
             end
             
             % compute optimal sigma2
-            tmp_sigma2 = opt_sigma2_normal(arr_y,arr_h,arr_c,arr_b);
+            tmp_sigma2 = hieropt_sigma2_normal(arr_y,arr_h,arr_c,arr_b);
             for ie = ind_e
                 sigma2{ie}(:,ind_y,ind_r) = tmp_sigma2; 
                 sigma2_by_y{ie}(:,iyg,ind_r) = tmp_sigma2;
@@ -220,5 +261,3 @@ end
 % foreach bc_group check if exists! sigma2_group containing all indices
 
 end
-
-
