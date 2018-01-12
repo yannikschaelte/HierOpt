@@ -2,6 +2,8 @@ function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,data,sc
 % hieropt_scalings computes the optimal scalings (b,c,sigma2).
 %
 % Parameters:
+%   sim
+%   data
 %   scOptions:
 %     .exp_groups
 %       .bc_idxs
