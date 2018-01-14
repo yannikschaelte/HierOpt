@@ -42,6 +42,22 @@ switch approach
         
         options.sc = sc;
         
+    case {'hierarchical-noreps','hierarchical-noreps-adjoint'}
+        nPar = 12;
+        
+        sc.exp_groups.bc_idxs = {1:3};
+        sc.exp_groups.sigma2_idxs = {1:3};
+        
+        sc.obs_groups.bc_idxs = {1,2,3,4,5,6,7,8};
+        sc.obs_groups.b_mode = {'absolute','absolute','absolute','absolute','absolute','absolute','absolute','absolute'};
+        sc.obs_groups.c_mode = {'multiple','multiple','multiple','multiple','multiple','multiple','multiple','multiple'};
+        sc.obs_groups.sigma2_idxs = {1,2,3,4,5,6,7,8};
+        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple','multiple','multiple','multiple','multiple','multiple'};
+        
+        sc.distribution = 'normal';
+        
+        options.sc = sc;
+        
 end
 
 parameters.number = nPar;

@@ -1,21 +1,16 @@
-function D = getOffsetScalingStd_Bachmann(varargin)
-% maps the offset, scaling and variance parameters to the corresponding
-% conditions
+function D = getOffsetScalingStd_Bachmann(D)
+% getOffsetScalingStd_Bachmann() maps the offset, scaling and variance 
+% parameters to the corresponding conditions
 
-D = varargin{1};
-if nargin > 1
-    modeltype = varargin{2};
-else
-    modeltype = 'reduced';
-end
+
 
 for cond = 1:36
     D(cond).offset = nan(20,1);
     D(cond).scaling = nan(20,1);
     D(cond).std = [106; 106; 105; 111;
-                113; 113; 112; 108; 104;
-                110; 114; 107; 107; 107; 
-                107; 107; 107 ;109; 105; 105]; % same for all conditions
+        113; 113; 112; 108; 104;
+        110; 114; 107; 107; 107;
+        107; 107; 107 ;109; 105; 105]; % same for all conditions
 end
 
 % long
@@ -53,7 +48,7 @@ D(8).scaling = D(7).scaling;
 D(7).name = 'CISoe';
 D(8).name = 'CISoe';
 
-% CISoe_pEpoR 
+% CISoe_pEpoR
 D(9).offset(2) = [40];
 D(9).scaling(2) = [80];
 D(10).offset = D(9).offset;
@@ -79,34 +74,29 @@ D(14).name = 'SHP1oe';
 
 % DR 7 min -> group 1
 for cond = [15:19]
-D(cond).offset([1,2]) = [50 42];
-D(cond).scaling([1,2]) = [90 82];
-D(cond).name = 'dose response 7 min';
+    D(cond).offset([1,2]) = [50 42];
+    D(cond).scaling([1,2]) = [90 82];
+    D(cond).name = 'dose response 7 min';
 end
 % DR 10 min -> group 2
 for cond = [26:31]
-D(cond).scaling([6]) = [97];
-D(cond).name = 'dose response 10 min';
+    D(cond).scaling([6]) = [97];
+    D(cond).name = 'dose response 10 min';
 end
 % DR 30 min -> group 3
 for cond = [20:25]
-D(cond).offset([1,2]) = [49 41];
-D(cond).scaling([1,2]) = [89 81];
-D(cond).name = 'dose response 30 min';
+    D(cond).offset([1,2]) = [49 41];
+    D(cond).scaling([1,2]) = [89 81];
+    D(cond).name = 'dose response 30 min';
 end
 % DR 90 min -> group 4
 for cond = 32:36
-D(cond).scaling([19,20]) = [61 62];
-D(cond).name = 'dose response 90 min';
+    D(cond).scaling([19,20]) = [61 62];
+    D(cond).name = 'dose response 90 min';
 end
 
-if strcmp(modeltype,'reduced') || strcmp(modeltype,'reduced_woinit') 
-    for cond = 1:36
-        D(cond).offset = D(cond).offset-2;
-        D(cond).scaling = D(cond).scaling-2;
-        D(cond).std = D(cond).std-2;
-    end
+for cond = 1:36
+    D(cond).offset = D(cond).offset-2;
+    D(cond).scaling = D(cond).scaling-2;
+    D(cond).std = D(cond).std-2;
 end
-% else would be 115 parameters (SOCS3RNAEqc and CISRNAEqc not fixed to 1, and 
-% one standard deviation parameter neglected (sd_pSTAT5_socs3oe) ), 
-% corresponds to model in ./models/Bachmann_JAKSTAT_syms
