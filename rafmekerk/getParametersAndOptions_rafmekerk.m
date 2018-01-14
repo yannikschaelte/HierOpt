@@ -7,7 +7,7 @@ options.MS.n_starts = nStarts; % actually 500
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
-    'display','iter',...
+    'display','off',...
     'GradObj','on',...
     'MaxIter',5000,...
     'TolFun',1e-10,...
@@ -29,8 +29,8 @@ switch approach
     case {'hierarchical','hierarchical-adjoint'}
         nPar = 12;
         
-        sc.exp_groups.bc_idxs = {1,2,3,4};
-        sc.exp_groups.sigma2_idxs = {1,2,3,4};
+        sc.exp_groups.bc_idxs = {1:3};
+        sc.exp_groups.sigma2_idxs = {1:3};
         
         sc.obs_groups.bc_idxs = {1,2};
         sc.obs_groups.b_mode = {'absolute','absolute'};

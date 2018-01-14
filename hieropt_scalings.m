@@ -1,9 +1,12 @@
-function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,data,scOptions)
+function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,D,scOptions)
 % hieropt_scalings computes the optimal scalings (b,c,sigma2).
 %
 % Parameters:
 %   sim
-%   data
+%   D()
+%     .t
+%     .Y
+%     .k
 %   scOptions:
 %     .exp_groups
 %       .bc_idxs
@@ -32,10 +35,10 @@ function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,data,sc
 %% PRELIMINARIES
 
 % number of experiments
-ne = size(data,2);
+ne = size(D,2);
 % number of observable (should be the same for all experiments, doesn't
-% make sense really otherwise)
-ny = size(data(1).my,2);
+% make sense really otherwise; same model)
+ny = size(D(1).Y,2);
 
 % fill unset fields with default values and perform sanity check
 scOptions = sanityCheck(scOptions,ne,ny);
@@ -77,8 +80,8 @@ c_by_y = cell(ne,1);
 sigma2_by_y = cell(ne,1);
 
 for ie = 1:ne
-    nt = size(data(ie).my,1);
-    nr = size(data(ie).my,3);
+    nt = size(D(ie).Y,1);
+    nr = size(D(ie).Y,3);
     
     b{ie} = zeros(nt,ny,nr);
     c{ie} = ones(nt,ny,nr);
@@ -94,10 +97,10 @@ end
 for ieg = 1:n_expGroups_bc
     
     ind_e = scOptions.exp_groups.bc_idxs{ieg};
-    nr = size(data(ind_e(1)).my,3);
+    nr = size(D(ind_e(1)).Y,3);
     
-    i_obsGroups_notabs_b = 1;
-    i_obsGroups_notabs_c = 1;
+    i_obsGroups_notabs_b = 0;
+    i_obsGroups_notabs_c = 0;
     
     for iyg = 1:n_obsGroups_bc
         
@@ -122,6 +125,14 @@ for ieg = 1:n_expGroups_bc
             % b,c have been set to 0,1 already
             continue;
         end
+        
+        if ~strcmp(b_mode,'absolute')
+            i_obsGroups_notabs_b = i_obsGroups_notabs_b + 1;
+        end
+        if ~strcmp(c_mode,'absolute')
+            i_obsGroups_notabs_c = i_obsGroups_notabs_c + 1;
+        end
+        
         n_repGroups_bc = numel(rep_groups.bc_idxs);
             
         for irg = 1:n_repGroups_bc
@@ -132,7 +143,7 @@ for ieg = 1:n_expGroups_bc
             arr_y = [];
             arr_h = [];
             for je = ind_e
-               arr_y = [arr_y reshape(data(je).my(:,ind_y,ind_r),1,[])];
+               arr_y = [arr_y reshape(D(je).Y(:,ind_y,ind_r),1,[])];
                arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
             end
             
@@ -140,25 +151,20 @@ for ieg = 1:n_expGroups_bc
             tmp_b = hieropt_b_normal(arr_y,arr_h,b_mode,c_mode);
             for ie = ind_e
                 b{ie}(:,ind_y,ind_r) = tmp_b;
-            end
-            if ~strcmp(b_mode,'absolute')
-                for ie = ind_e
+                if ~strcmp(b_mode,'absolute')
                     b_by_y{ie}(:,i_obsGroups_notabs_b,ind_r) = tmp_b;
                 end
-                i_obsGroups_notabs_b = i_obsGroups_notabs_b + 1;
             end
+            
             arr_b = tmp_b*ones(size(arr_y));
             
             % compute optimal c
             tmp_c = hieropt_c_normal(arr_y,arr_h,arr_b,c_mode);
             for ie = ind_e
                 c{ie}(:,ind_y,ind_r) = tmp_c;
-            end
-            if ~strcmp(c_mode,'absolute')
-                for ie = ind_e
+                if ~strcmp(c_mode,'absolute')
                     c_by_y{ie}(:,i_obsGroups_notabs_c,ind_r) = tmp_c;
                 end
-                i_obsGroups_notabs_c = i_obsGroups_notabs_c + 1;
             end
         end
         
@@ -169,7 +175,7 @@ end
 for ieg = 1:n_expGroups_sigma2
     
     ind_e = scOptions.exp_groups.sigma2_idxs{ieg};
-    nr = size(data(ind_e(1)).my,3);
+    nr = size(D(ind_e(1)).Y,3);
     
     i_obsGroups_notabs_sigma2 = 1;
     
@@ -208,20 +214,20 @@ for ieg = 1:n_expGroups_sigma2
             arr_c = [];
             arr_b = [];
             for ie = ind_e
-               arr_y = [arr_y reshape(data(ie).my(:,ind_y,ind_r),1,[])];
+               arr_y = [arr_y reshape(D(ie).Y(:,ind_y,ind_r),1,[])];
                arr_h = [arr_h reshape(sim(ie).y(:,ind_y),1,[])];
                arr_c = [arr_c reshape(c{ie}(:,ind_y,ind_r),1,[])];
                arr_b = [arr_b reshape(b{ie}(:,ind_y,ind_r),1,[])];
             end
             
             % compute optimal sigma2
-            tmp_sigma2 = hieropt_sigma2_normal(arr_y,arr_h,arr_c,arr_b);
+            tmp_sigma2 = hieropt_sigma2_normal(arr_y,arr_h,arr_b,arr_c);
             for ie = ind_e
                 sigma2{ie}(:,ind_y,ind_r) = tmp_sigma2;
             end
             if ~strcmp(sigma2_mode,'absolute')
                 for ie = ind_e
-                    sigma2_by_y{ie}(:,i_obsGroups_notabs_sigma2,ind_r) = tpm_sigma2;
+                    sigma2_by_y{ie}(:,i_obsGroups_notabs_sigma2,ind_r) = tmp_sigma2;
                 end
                 i_obsGroups_notabs_sigma2 = i_obsGroups_notabs_sigma2 + 1;
             end

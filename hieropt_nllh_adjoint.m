@@ -1,4 +1,4 @@
-function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,kappa,D,amiOptions,scOptions )
+function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,D,amiOptions,scOptions )
 % hieropt_nllh_adjoint uses the hierarchical approach to compute the nllh.
 % Derivatives are computed using the adjoint approach.
 % For an example usage see
@@ -8,7 +8,6 @@ function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,kappa,D,amiOptions,s
 % Parameters:
 %   simfun
 %   theta
-%   kappa
 %   D
 %   amiOptions
 %   scOptions
@@ -40,7 +39,7 @@ amiOptions.sensi = 0;
 sim = struct([]);
 for ie = 1:ne
     
-    kappa_e = [kappa(:,ie); zeros(n_obsGroups_notabs_b,1); ones(n_obsGroups_notabs_c,1)];
+    kappa_e = [D(ie).k(:); zeros(n_obsGroups_notabs_b,1); ones(n_obsGroups_notabs_c,1)];
     
     sol = simfun(D(ie).t,theta,kappa_e,[],amiOptions);
     
@@ -81,7 +80,7 @@ else
     end
     
     for ie = 1:ne
-        nr = size(D(ie).my,3);
+        nr = size(D(ie).Y,3);
         for ir = 1:nr
             clear amiData
             
@@ -95,10 +94,10 @@ else
             sigma_re = reshape(sigma_re,1,[]);
             sigma_re = repmat(sigma_re,length(D(ie).t),1);
             
-            kappa_re = [kappa(:,ie); b_re; c_re];
+            kappa_re = [D(ie).k(:); b_re; c_re];
             
             amiData.t = D(ie).t;
-            amiData.Y = D(ie).my(:,:,ir);
+            amiData.Y = D(ie).Y(:,:,ir);
             amiData.Sigma_Y = sigma_re;
             amiData.condition = kappa_re;
             amiData = amidata(amiData);

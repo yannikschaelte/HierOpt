@@ -1,4 +1,4 @@
-function [ varargout ] = nllh_jakstat_standard(theta, kappa, D)
+function [ varargout ] = nllh_jakstat_standard(theta, D)
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
@@ -26,14 +26,14 @@ switch nargout
 end
 
 for ie = 1:n_e
-    n_r = size(D(ie),3);
+    n_r = size(D(ie).Y,3);
     for ir = 1:n_r
         
         % set data for simulation
         amiData.t = D(ie).t;
-        amiData.Y = D(ie).my(:,:,ir);
+        amiData.Y = D(ie).Y(:,:,ir);
         amiData.Sigma_Y = nan(size(amiData.Y));
-        amiData.condition = kappa(:,ie);
+        amiData.condition = D(ie).k(:);
         amiData = amidata(amiData);
         
         sol = simulate_jakstat([], theta, [], amiData, amiOptions);

@@ -1,4 +1,4 @@
-function [ varargout ]  = nllh_jakstat_hierarchical_offsets(theta,kappa,D,scOptions)
+function [ varargout ]  = nllh_jakstat_hierarchical_offsets(theta,D,scOptions)
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
@@ -7,14 +7,14 @@ simfun = @simulate_jakstat_hierarchical_offsets;
 switch nargout
     case 1
         [varargout{1}] = hieropt_nllh_forward(true,simfun,...
-            theta,kappa,D,amiOptions,scOptions);
+            theta,D,amiOptions,scOptions);
     case 2
         [varargout{1},varargout{2}] = hieropt_nllh_forward(true,simfun,...
-            theta,kappa,D,amiOptions,scOptions);
+            theta,D,amiOptions,scOptions);
     case 3
         [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward(true,simfun,...
             @simulate_jakstat_hierarchical,...
-            theta,kappa,D,amiOptions,scOptions);
+            theta,D,amiOptions,scOptions);
 end
 
 end

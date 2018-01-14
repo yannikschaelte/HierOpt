@@ -1,20 +1,18 @@
 function [  ] = run_rafmekerk(approach)
 
-kappa = [zeros(1,2);[0,30];[5,0]];
-
 exdir=fileparts(which('run_rafmekerk'));
 [parameters,options] = getParametersAndOptions_rafmekerk(approach);
 
 switch approach
     case 'standard'
         load data_RafMekErk_standard.mat
-        nllh = @(x) nllh_rafmekerk_standard(x,kappa,D);
+        nllh = @(x) nllh_rafmekerk_standard(x,D);
     case 'hierarchical'
         load data_RafMekErk.mat
-        nllh = @(x) nllh_rafmekerk_hierarchical(x,kappa,D,options.sc);
+        nllh = @(x) nllh_rafmekerk_hierarchical(x,D,options.sc);
     case 'hierarchical-adjoint'
         load data_RafMekErk.mat
-        nllh = @(x) nllh_rafmekerk_hierarchical_adjoint(x,kappa,D,options.sc);
+        nllh = @(x) nllh_rafmekerk_hierarchical_adjoint(x,D,options.sc);
     otherwise
         error('approach not recognized');
 end

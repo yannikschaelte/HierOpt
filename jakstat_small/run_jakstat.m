@@ -1,22 +1,21 @@
 function [  ] = run_jakstat(approach)
 
 load('data_jakstat','D');
-kappa = [1.4; 0.45]; % omega_cyt, omega_nuc
 
 exdir=fileparts(which('run_jakstat.m'));
 [parameters,options] = getParametersAndOptions_jakstat(approach);
 
 switch approach
     case 'standard'
-        nllh = @(x) nllh_jakstat_standard(x,kappa,D);
+        nllh = @(x) nllh_jakstat_standard(x,D);
     case 'hierarchical'
-        nllh = @(x) nllh_jakstat_hierarchical(x,kappa,D,options.sc);
+        nllh = @(x) nllh_jakstat_hierarchical(x,D,options.sc);
     case 'hierarchical-adjoint'
-        nllh = @(x) nllh_jakstat_hierarchical_adjoint(x,kappa,D,options.sc);
+        nllh = @(x) nllh_jakstat_hierarchical_adjoint(x,D,options.sc);
     case 'hierarchical-offsets'
-        nllh = @(x) nllh_jakstat_hierarchical_offsets(x,kappa,D,options.sc);
+        nllh = @(x) nllh_jakstat_hierarchical_offsets(x,D,options.sc);
     case 'hierarchical-adjoint-offsets'
-        nllh = @(x) nllh_jakstat_hierarchical_adjoint_offsets(x,kappa,D,options.sc);
+        nllh = @(x) nllh_jakstat_hierarchical_adjoint_offsets(x,D,options.sc);
     otherwise
         error('approach not recognized');
 end

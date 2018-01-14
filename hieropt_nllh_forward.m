@@ -15,7 +15,6 @@ function [ varargout ] = hieropt_nllh_forward( varargin )
 %   if b_sim == true
 %     simfun
 %     theta
-%     kappa
 %     D
 %     amiOptions
 %     scOptions
@@ -38,18 +37,17 @@ b_sim = varargin{1};
 if b_sim
     simfun = varargin{2};
     theta = varargin{3};
-    kappa = varargin{4};
-    D = varargin{5};
-    amiOptions = varargin{6};
-    scOptions = varargin{7};
+    D = varargin{4};
+    amiOptions = varargin{5};
+    scOptions = varargin{6};
 
     switch nargout
         case 1
-            [varargout{1}] = hieropt_nllh_forward_withsim(simfun,theta,kappa,D,amiOptions,scOptions);
+            [varargout{1}] = hieropt_nllh_forward_withsim(simfun,theta,D,amiOptions,scOptions);
         case 2
-            [varargout{1},varargout{2}] = hieropt_nllh_forward_withsim(simfun,theta,kappa,D,amiOptions,scOptions);
+            [varargout{1},varargout{2}] = hieropt_nllh_forward_withsim(simfun,theta,D,amiOptions,scOptions);
         case 3
-            [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withsim(simfun,theta,kappa,D,amiOptions,scOptions);
+            [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withsim(simfun,theta,D,amiOptions,scOptions);
     end
 else
     sim = varargin{2};
@@ -70,7 +68,7 @@ end
 
 end % function
 
-function [ varargout ] = hieropt_nllh_forward_withsim(simfun,theta,kappa,D,amiOptions,scOptions)
+function [ varargout ] = hieropt_nllh_forward_withsim(simfun,theta,D,amiOptions,scOptions)
 
 % set correct amiOptions
 amiOptions.sensi_meth = 'forward';
@@ -85,7 +83,7 @@ ne = size(D,2);
 % forward simulation
 sim = struct([]);
 for ie = 1:ne
-    sol = simfun(D(ie).t,theta,kappa(:,ie),[],amiOptions);
+    sol = simfun(D(ie).t,theta,D(ie).k,[],amiOptions);
     
     if (sol.status ~= 0)
         error('hieropt: could not integrate ODE.');
@@ -129,15 +127,15 @@ if nargout > 1
 end
 
 for ie = 1:ne
-    nr = size(D(ie).my,3);
+    nr = size(D(ie).Y,3);
     
     b_e = b{ie};
     c_e = c{ie};
     sigma2_e = sigma2{ie};
     
-    y_ch = bsxfun(@minus,D(ie).my,bsxfun(@times,c_e,sim(ie).y)+b_e);
+    y_ch = bsxfun(@minus,D(ie).Y,bsxfun(@times,c_e,sim(ie).y)+b_e);
     
-    nllh = nllh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).my),log(2*pi*sigma2_e))+...
+    nllh = nllh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).Y),log(2*pi*sigma2_e))+...
         bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
     
     if nargout > 1

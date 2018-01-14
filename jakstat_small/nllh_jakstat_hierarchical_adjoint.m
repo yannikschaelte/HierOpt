@@ -1,4 +1,4 @@
-function [ varargout ] = nllh_jakstat_hierarchical_adjoint(theta,kappa,D,scOptions)
+function [ varargout ] = nllh_jakstat_hierarchical_adjoint(theta,D,scOptions)
 
 amiOptions.rtol = 1e-12;
 amiOptions.atol = 1e-14;
@@ -6,11 +6,11 @@ simfun = @simulate_jakstat_hierarchical_adjoint;
 
 switch nargout
     case 1
-        [varargout{1}] = hieropt_nllh_adjoint(simfun,theta,kappa,D,amiOptions,scOptions);
+        [varargout{1}] = hieropt_nllh_adjoint(simfun,theta,D,amiOptions,scOptions);
     case 2
-        [varargout{1},varargout{2}] = hieropt_nllh_adjoint(simfun,theta,kappa,D,amiOptions,scOptions);
+        [varargout{1},varargout{2}] = hieropt_nllh_adjoint(simfun,theta,D,amiOptions,scOptions);
     case 3
-        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_adjoint(simfun,theta,kappa,D,amiOptions,scOptions);
+        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_adjoint(simfun,theta,D,amiOptions,scOptions);
 end
 
 end
