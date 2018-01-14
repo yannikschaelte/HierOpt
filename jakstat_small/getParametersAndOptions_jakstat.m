@@ -3,7 +3,7 @@ function [parameters,options] = getParametersAndOptions_jakstat(approach)
 nStarts = 20;
 
 options.MS = PestoOptions();
-options.MS.n_starts = nStarts; %actually 500
+options.MS.n_starts = nStarts; % actually 500
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
@@ -16,7 +16,7 @@ options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
     'PrecondBandWidth', inf);
 options.MS.obj_type = 'negative log-posterior';
 
-nPar = 17;
+nPar = 17; % maximum number of parameters
 minPar = -5*ones(nPar,1);
 maxPar = 3*ones(nPar,1);
 maxPar(4)  =  6;
@@ -25,7 +25,7 @@ minPar(10) = -6;
 minPar(4)  = -3;
 minPar(2)  = -3;
 
-rng(1);
+rng(0);
 par0 = bsxfun(@plus,minPar,bsxfun(@times,maxPar - minPar, lhsdesign(nStarts,nPar,'smooth','off')'));
    
 switch approach
@@ -105,4 +105,3 @@ parameters.max = maxPar(1:nPar,1);
 parameters.guess = par0(1:nPar,1:nStarts);
 
 end
-

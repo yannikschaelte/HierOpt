@@ -1,4 +1,4 @@
-function [model] = RafMekErk_hierarchical_adjoint_syms()
+function [model] = rafmekerk_hierarchical_adjoint_syms()
 
 %% CVODES OPTIONS
 % % absolute tolerance

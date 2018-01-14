@@ -1,4 +1,4 @@
-function [model] = rafmekerk_hierarchical_syms()
+function [model] = RafMekErk_analytical_syms()
 
 %% CVODES OPTIONS
 % % absolute tolerance
