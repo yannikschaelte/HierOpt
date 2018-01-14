@@ -10,7 +10,8 @@ function [ b,c,sigma2,b_by_y,c_by_y,sigma2_by_y ] = hieropt_scalings(sim,data,sc
 %       .sigma2_idxs
 %     .obs_groups
 %       .bc_idxs
-%       .bc_mode       : 'multiple','single','absolute'
+%       .b_mode        : 'multiple','single','absolute'
+%       .c_mode        : 'multiple','single','absolute'
 %       .sigma2_idxs   
 %       .sigma2_mode   : 'multiple','single','absolute'
 %
@@ -63,7 +64,7 @@ for iyg = 1:n_obsGroups_bc
 end
 for iyg = 1:n_obsGroups_sigma2
     if ~strcmp(scOptions.obs_groups.sigma2_mode{iyg},'absolute')
-        n_obsGroups_notabs_sigma2 + n_obsGroups_notabs_sigma2 + 1;
+        n_obsGroups_notabs_sigma2 = n_obsGroups_notabs_sigma2 + 1;
     end
 end
 
@@ -90,7 +91,7 @@ end
 
 %% OPTIMAL VALUES FOR THE PROPORTIONALITIES AND OFFSETS
 
-for ieg = n_expGroups_bc
+for ieg = 1:n_expGroups_bc
     
     ind_e = scOptions.exp_groups.bc_idxs{ieg};
     nr = size(data(ind_e(1)).my,3);
@@ -139,10 +140,12 @@ for ieg = n_expGroups_bc
             tmp_b = hieropt_b_normal(arr_y,arr_h,b_mode,c_mode);
             for ie = ind_e
                 b{ie}(:,ind_y,ind_r) = tmp_b;
-                if ~strcmp(b_mode,'absolute')
+            end
+            if ~strcmp(b_mode,'absolute')
+                for ie = ind_e
                     b_by_y{ie}(:,i_obsGroups_notabs_b,ind_r) = tmp_b;
-                    i_obsGroups_notabs_b = i_obsGroups_notabs_b + 1;
                 end
+                i_obsGroups_notabs_b = i_obsGroups_notabs_b + 1;
             end
             arr_b = tmp_b*ones(size(arr_y));
             
@@ -150,10 +153,12 @@ for ieg = n_expGroups_bc
             tmp_c = hieropt_c_normal(arr_y,arr_h,arr_b,c_mode);
             for ie = ind_e
                 c{ie}(:,ind_y,ind_r) = tmp_c;
-                if ~strcmp(c_mode,'absolute')
+            end
+            if ~strcmp(c_mode,'absolute')
+                for ie = ind_e
                     c_by_y{ie}(:,i_obsGroups_notabs_c,ind_r) = tmp_c;
-                    i_obsGroups_notabs_c = i_obsGroups_notabs_c + 1;
                 end
+                i_obsGroups_notabs_c = i_obsGroups_notabs_c + 1;
             end
         end
         
@@ -166,14 +171,18 @@ for ieg = 1:n_expGroups_sigma2
     ind_e = scOptions.exp_groups.sigma2_idxs{ieg};
     nr = size(data(ind_e(1)).my,3);
     
+    i_obsGroups_notabs_sigma2 = 1;
+    
     for iyg = 1:n_obsGroups_sigma2
         
         ind_y = scOptions.obs_groups.sigma2_idxs{iyg};
         
+        sigma2_mode = scOptions.obs_groups.sigma2_mode{iyg};
+        
         % create replicate groups
         % TODO we don't really need replicate groups, we can also have a
         % more generic approach at little cost
-        switch scOptions.obs_groups.sigma2_mode{iyg}
+        switch sigma2_mode
             case 'multiple'
                 for ir=1:nr
                     rep_groups.sigma2_idxs{ir}=ir;
@@ -208,8 +217,13 @@ for ieg = 1:n_expGroups_sigma2
             % compute optimal sigma2
             tmp_sigma2 = hieropt_sigma2_normal(arr_y,arr_h,arr_c,arr_b);
             for ie = ind_e
-                sigma2{ie}(:,ind_y,ind_r) = tmp_sigma2; 
-                sigma2_by_y{ie}(:,iyg,ind_r) = tmp_sigma2;
+                sigma2{ie}(:,ind_y,ind_r) = tmp_sigma2;
+            end
+            if ~strcmp(sigma2_mode,'absolute')
+                for ie = ind_e
+                    sigma2_by_y{ie}(:,i_obsGroups_notabs_sigma2,ind_r) = tpm_sigma2;
+                end
+                i_obsGroups_notabs_sigma2 = i_obsGroups_notabs_sigma2 + 1;
             end
         end    
     end

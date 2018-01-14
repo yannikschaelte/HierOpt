@@ -91,7 +91,7 @@ else
             c_re = c_by_y{ie}(1,:,ir);
             c_re = reshape(c_re,[],1);
             
-            sigma_re = sqrt(sigma2_by_y{ie}(1,:,ir));
+            sigma_re = sqrt(sigma2{ie}(1,:,ir));
             sigma_re = reshape(sigma_re,1,[]);
             sigma_re = repmat(sigma_re,length(D(ie).t),1);
             
