@@ -1,7 +1,7 @@
 % simulate_rafmekerk_hierarchical_noreps_adjoint.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit 5a39fd5749528be48ac212cab515c9025a3506a3 in branch master in repo https://github.com/icb-dcm/amici.
+%   this routine was generated using AMICI commit 5cb96b75b4c9ba3405165e756b7a7c03d046d4bf in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======
