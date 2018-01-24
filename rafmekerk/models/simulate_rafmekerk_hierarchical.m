@@ -1,7 +1,7 @@
 % simulate_rafmekerk_hierarchical.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit 5cb96b75b4c9ba3405165e756b7a7c03d046d4bf in branch master in repo https://github.com/icb-dcm/amici.
+%   this routine was generated using AMICI commit 4a039d59b0c77490452d7a4dd18a249c44b4b93e in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======

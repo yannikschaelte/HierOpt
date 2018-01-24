@@ -12,7 +12,7 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     if (nargout == 1)
         amiOptions.sensi = 0;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(amiData(j).t, theta, amiData(j).condition, amiData(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
@@ -22,7 +22,7 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     elseif (nargout == 2)
         amiOptions.sensi = 1;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(amiData(j).t, theta, amiData(j).condition, amiData(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
@@ -33,18 +33,18 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     elseif (nargout == 3)
         amiOptions.sensi = 2;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(amiData(j).t, theta, amiData(j).condition, amiData(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
             
             % Hessian matrix approximation from 1st order sensitivities
             hessian = zeros(28);       % preallocation
-            nT = length(amiData(j).t);       % timepoints
-            res = amiData(j).Y - sol.y;
+            nT = length(D(j).t);       % timepoints
+            res = D(j).Y - sol.y;
             res(isnan(res)) = 0;
             for iT = 1 : nT
-                if (~isnan(amiData(j).Y(iT,1)))
+                if (~isnan(D(j).Y(iT,1)))
                     resi = res(iT,1);
                     sigma = sol.sigmay(iT,1);
                     sy(:) = sol.sy(iT,1,:);

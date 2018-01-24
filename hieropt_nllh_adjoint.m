@@ -54,7 +54,7 @@ for ie = 1:ne
 end
 
 % optimal scalings
-[b,c,sigma2,b_by_y,c_by_y,sigma2_by_y] = hieropt_scalings(sim,D,scOptions);
+[b,c,noise,b_by_y,c_by_y,noise_by_y] = hieropt_scalings(sim,D,scOptions);
 
 % nllh, snllh, s2nllh
 
@@ -70,7 +70,7 @@ switch nargout
 end
 
 if nargout == 1
-    nllh = hieropt_nllh_forward(false,sim,D,b,c,sigma2);
+    nllh = hieropt_nllh_forward(false,sim,D,b,c,noise);
 else
     nllh = 0;
     n_theta = length(theta);
@@ -90,7 +90,7 @@ else
             c_re = c_by_y{ie}(1,:,ir);
             c_re = reshape(c_re,[],1);
             
-            sigma_re = sqrt(sigma2{ie}(1,:,ir));
+            sigma_re = sqrt(noise{ie}(1,:,ir));
             sigma_re = reshape(sigma_re,1,[]);
             sigma_re = repmat(sigma_re,length(D(ie).t),1);
             

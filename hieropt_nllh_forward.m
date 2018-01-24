@@ -23,7 +23,7 @@ function [ varargout ] = hieropt_nllh_forward( varargin )
 %     D
 %     b
 %     c
-%     sigma2
+%     noise
 %
 % Return Values:
 %  [nllh,snllh,s2nllh]
@@ -54,15 +54,15 @@ else
     D = varargin{3};
     b = varargin{4};
     c = varargin{5};
-    sigma2 = varargin{6};
+    noise = varargin{6};
     
     switch nargout
         case 1
-            [varargout{1}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+            [varargout{1}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
         case 2
-            [varargout{1},varargout{2}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+            [varargout{1},varargout{2}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
         case 3
-            [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+            [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
     end
 end
 
@@ -96,21 +96,21 @@ for ie = 1:ne
 end
 
 % optimal scalings
-[b,c,sigma2] = hieropt_scalings(sim,D,scOptions);
+[b,c,noise] = hieropt_scalings(sim,D,scOptions);
 
 % nllh, grad, fim computed from given data
 switch nargout
     case 1
-        [varargout{1}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+        [varargout{1}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
     case 2
-        [varargout{1},varargout{2}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+        [varargout{1},varargout{2}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
     case 3
-        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2);
+        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise);
 end
 
 end % function
 
-function [ varargout ] = hieropt_nllh_forward_withoutsim(sim,D,b,c,sigma2)
+function [ varargout ] = hieropt_nllh_forward_withoutsim(sim,D,b,c,noise)
 
 ne = size(D,2);
 if nargout > 1
@@ -131,19 +131,19 @@ for ie = 1:ne
     
     b_e = b{ie};
     c_e = c{ie};
-    sigma2_e = sigma2{ie};
+    noise_e = noise{ie};
     
     y_ch = bsxfun(@minus,D(ie).Y,bsxfun(@times,c_e,sim(ie).y)+b_e);
     
-    nllh = nllh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).Y),log(2*pi*sigma2_e))+...
-        bsxfun(@rdivide,bsxfun(@power,y_ch,2),sigma2_e),1),3),2);
+    nllh = nllh + 0.5*sum(sum(nansum(bsxfun(@times,~isnan(D(ie).Y),log(2*pi*noise_e))+...
+        bsxfun(@rdivide,bsxfun(@power,y_ch,2),noise_e),1),3),2);
     
     if nargout > 1
         dy_ch = - bsxfun(@times,permute(c_e,[1,2,4,3]),repmat(sim(ie).sy,[1,1,1,nr]));
         
         grad = grad + permute(sum(sum(nansum(...
             bsxfun(@times,permute(...
-            bsxfun(@rdivide,y_ch,sigma2_e),[1,2,4,3]),...
+            bsxfun(@rdivide,y_ch,noise_e),[1,2,4,3]),...
             dy_ch),1),4),2),[3,2,1]);
         
         if nargout > 2
@@ -152,7 +152,7 @@ for ie = 1:ne
                     fim(j,k) = fim(j,k) + nansum(nansum(nansum(...
                         bsxfun(@rdivide,...
                         bsxfun(@times,dy_ch(:,:,:,j),dy_ch(:,:,:,k)),...
-                        sigma2_e))));
+                        noise_e))));
                 end
             end
         end

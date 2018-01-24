@@ -5,8 +5,8 @@ exdir=fileparts(which('run_rafmekerk'));
 
 switch approach
     case 'standard'
-        load data_rafmekerk_standard.mat
-        nllh = @(x) nllh_rafmekerk_standard(x,D,'normal');
+        load data_rafmekerk_noreps.mat
+        nllh = @(x) nllh_rafmekerk_standard(x,D);
     case 'hierarchical'
         load data_rafmekerk.mat
         nllh = @(x) nllh_rafmekerk_hierarchical(x,D,options.sc);

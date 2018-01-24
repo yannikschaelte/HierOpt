@@ -7,7 +7,7 @@ options.MS.n_starts = nStarts; % actually 500
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
-    'display','off',...
+    'display','iter',...
     'GradObj','on',...
     'MaxIter',2000,...
     'TolFun',1e-10,...
@@ -36,13 +36,13 @@ switch approach
         nPar = 12;
         
         sc.exp_groups.bc_idxs = {1};
-        sc.exp_groups.sigma2_idxs = {1};
+        sc.exp_groups.noise_idxs = {1};
         
         sc.obs_groups.bc_idxs = {1,2,3};
         sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
-        sc.obs_groups.sigma2_idxs = {1,2,3};
-        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        sc.obs_groups.noise_idxs = {1,2,3};
+        sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
         sc.distribution = 'normal';
         
@@ -52,13 +52,13 @@ switch approach
         nPar = 12;
         
         sc.exp_groups.bc_idxs = {1};
-        sc.exp_groups.sigma2_idxs = {1};
+        sc.exp_groups.noise_idxs = {1};
         
         sc.obs_groups.bc_idxs = {1,2,3};
         sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
-        sc.obs_groups.sigma2_idxs = {1,2,3};
-        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        sc.obs_groups.noise_idxs = {1,2,3};
+        sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
         sc.distribution = 'normal';
         
@@ -68,13 +68,13 @@ switch approach
         nPar = 10;
 
         sc.exp_groups.bc_idxs = {1};
-        sc.exp_groups.sigma2_idxs = {1};
+        sc.exp_groups.noise_idxs = {1};
         
         sc.obs_groups.bc_idxs = {1,2,3};
         sc.obs_groups.b_mode = {'multiple','multiple','absolute'};
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
-        sc.obs_groups.sigma2_idxs = {1,2,3};
-        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        sc.obs_groups.noise_idxs = {1,2,3};
+        sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
         sc.distribution = 'normal';
         
@@ -85,13 +85,13 @@ switch approach
         
         
         sc.exp_groups.bc_idxs = {1};
-        sc.exp_groups.sigma2_idxs = {1};
+        sc.exp_groups.noise_idxs = {1};
         
         sc.obs_groups.bc_idxs = {1,2,3};
         sc.obs_groups.b_mode = {'multiple','multiple','absolute'};
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
-        sc.obs_groups.sigma2_idxs = {1,2,3};
-        sc.obs_groups.sigma2_mode = {'multiple','multiple','multiple'};
+        sc.obs_groups.noise_idxs = {1,2,3};
+        sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
         sc.distribution = 'normal';
         

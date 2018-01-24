@@ -1,4 +1,5 @@
-function [ sigma2 ] = hieropt_sigma2_normal( arr_y, arr_h, arr_b, arr_c )
+function [ noise ] = hieropt_noise_normal( arr_y, arr_h, arr_b, arr_c )
+% Computes noise=sigma2 in a Gaussian noise model.
 
 arr_y = reshape(arr_y,1,[]);
 arr_h = reshape(arr_h,1,[]);
@@ -14,7 +15,7 @@ y_ch = bsxfun(@minus,arr_y,bsxfun(@times,arr_c,arr_h)+arr_b);
 
 numerator = nansum(bsxfun(@power,y_ch,2));
 
-sigma2 = numerator / count;
+noise = numerator / count;
 
 end
 
