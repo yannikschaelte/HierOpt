@@ -18,8 +18,8 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %       .bc_idxs
 %       .b_mode        : 'multiple','single','absolute'
 %       .c_mode        : 'multiple','single','absolute'
-%       .noise_idxs   
-%       .noise_mode   : 'multiple','single','absolute'
+%       .noise_idxs
+%       .noise_mode    : 'multiple','single','absolute'
 %
 % Return Values:
 %   b
