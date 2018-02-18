@@ -11,10 +11,10 @@ clear all
 close all
 clc
 
-compilation_BachmannJakStat
+% compilation_BachmannJakStat
 
-runEstimation_BachmannJakStat('hierarchical','normal')
-runEstimation_BachmannJakStat('hierarchical','laplace')
+% runEstimation_BachmannJakStat('hierarchical','normal')
+% runEstimation_BachmannJakStat('hierarchical','laplace')
 
 runEstimation_BachmannJakStat('standard','normal')
 runEstimation_BachmannJakStat('standard','laplace')
