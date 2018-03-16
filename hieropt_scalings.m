@@ -20,6 +20,8 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %       .c_mode        : 'multiple','single','absolute'
 %       .noise_idxs
 %       .noise_mode    : 'multiple','single','absolute'
+%     .noise_matrix    : nt*ny*nr*ne-matrix, for
+%                        noise_mode='absolute', optional
 %
 % Return Values:
 %   b
@@ -92,6 +94,7 @@ for ie = 1:ne
 
     b_by_y{ie} = zeros(nt,n_obsGroups_notabs_b,nr);
     c_by_y{ie} = ones(nt,n_obsGroups_notabs_c,nr);
+    if isfield
     noise_by_y{ie} = ones(nt,n_obsGroups_notabs_noise,nr);
 end
 
@@ -202,7 +205,7 @@ for ieg = 1:n_expGroups_noise
                 % noise has already been set to 1
                 continue;
             case 'user-specified'
-                error('TODO');
+                continue;
             otherwise
                 error('could not resolve input');
         end
@@ -276,7 +279,7 @@ for ieg = 1:n_expGroups_bc
             error('hieropt: not allowed combination of b_mode|c_mode single|multiple');
         end
     end
-end
+end    
 
 % check if all values sharing b,c also share noise (or noise
 % not-optimized)
