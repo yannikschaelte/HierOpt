@@ -1,4 +1,4 @@
-function model = Chen2009_syms()
+function model = chen_standard_syms()
 
 time = sym('t');
 model.param = 'log10';

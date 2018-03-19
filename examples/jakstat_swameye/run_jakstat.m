@@ -1,12 +1,12 @@
 function [  ] = run_jakstat(approach)
 
-load('data_jakstat','D');
-
-exdir=fileparts(which('run_jakstat.m'));
+exdir = fileparts(which('run_jakstat.m'));
 addpath(fullfile(exdir,'data'));
 addpath(fullfile(exdir,'models'));
 
-[parameters,options] = getParametersAndOptions_jakstat(approach);
+load('data_jakstat','D');
+
+[parameters,options] = get_parameters_and_options_jakstat(approach);
 
 switch approach
     case 'standard'
