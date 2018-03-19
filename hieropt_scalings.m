@@ -1,8 +1,8 @@
 function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptions)
-% hieropt_scalings computes the optimal scalings (b,c,noise). For this aim, all values
-% belonging to one group are aggregated and put into 1-dim lists. These are then passed
-% to the hieropt_b_normal, hieropt_c_normal and hieropt_noise_normal functions to 
-% compute the optimal values.
+% hieropt_scalings computes the optimal scalings (b,c,noise). For this aim,
+% all values belonging to one group are aggregated and put into 1-dim 
+% lists. These are then passed to the hieropt_b_normal, hieropt_c_normal 
+% and hieropt_noise_normal functions to compute the optimal values.
 %
 % Parameters:
 %   sim   : 1*ne struct array with simulations as generated in
@@ -13,16 +13,28 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %     .t  : nt*1 array with time points
 %     .Y  : nt*ny matrix with observations
 %     .k  : nk*1 array with conditions
-%   scOptions:
-%     .exp_groups
-%       .bc_idxs
-%       .noise_idxs
-%     .obs_groups
-%       .bc_idxs
+%   scOptions          : struct containing options for hierarchical
+%                        approach
+%     .exp_groups      : struct containing options regarding experiment
+%                        groups
+%       .bc_idxs       : cell array, entry j contains indices of
+%                        offset-and-proportionality group j for the 
+%                        experiments 
+%       .noise_idxs    : same for noise
+%     .obs_groups      : struct containing options regarding observable
+%                        groups
+%       .bc_idxs       : cell array, entry j contains indices of
+%                        offset-and-proportionality group j for the
+%                        observables
 %       .b_mode        : 'multiple','single','absolute'
+%                        entry j contains mode of b in group bc_idxs{j}
 %       .c_mode        : 'multiple','single','absolute'
-%       .noise_idxs
+%                        entry j contains mode of c in group bc_idxs{j}
+%       .noise_idxs    : cell array, entry j contains indices of
+%                        noise-group j for the observables
 %       .noise_mode    : 'multiple','single','absolute'
+%                        entry j contains mode of nosie in group
+%                        nosie_idxs{j}
 %
 % Return Values:
 %   b           : 1*ne cell array of nt*ny*nr matrices containing the
