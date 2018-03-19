@@ -11,8 +11,9 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %     .sy : sensitivities w.r.t. parameters (for forward approach)
 %   D()             : 1*ne struct array with fields (for each experiment)
 %     .t            : nt*1 array with time points
-%     .Y            : nt*ny matrix with observations
-%     .condition    : nk*1 array with conditions
+%     .Y            : nt*ny*nr matrix with observations
+%     .Sigma_Y      : nt*ny*nr matrix with noise parameters (optional)
+%     .condition    : nk*1 array with conditions (optional)
 %   scOptions          : struct containing options for hierarchical
 %                        approach
 %     .exp_groups      : struct containing options regarding experiment
@@ -54,6 +55,8 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 
 %% PRELIMINARIES
 
+D = sanityCheckD(D);
+
 % number of experiments
 ne = size(D,2);
 % number of observable (should be the same for all experiments, doesn't
@@ -61,7 +64,7 @@ ne = size(D,2);
 ny = size(D(1).Y,2);
 
 % fill unset fields with default values and perform sanity check
-scOptions = sanityCheck(scOptions,ne,ny);
+scOptions = sanityCheckScOptions(scOptions,ne,ny);
 
 % initialization of b,c,noise
 % return a single (c,noise) for every y,r,e (might return only one for
@@ -257,10 +260,23 @@ end
 
 end
 
-function [ scOptions ] = sanityCheck(scOptions,ne,ny)
+function [ D ] = sanityCheckD(D)
+    n_e = size(D,2);
+    
+    for je = 1:n_e
+        if ~isfield(D(je),'condition')
+            D(je).condition = [];
+        end
+        if ~isfield(D(je),'Sigma_Y')
+            D(je).Sigma_Y = ones(size(D(je).Y));
+        end
+    end
+end
 
-% default values for groupings: all together, absolute scalings,
-% single noise
+function [ scOptions ] = sanityCheckScOptions(scOptions,ne,ny)
+% fill all non-set fields with default values
+
+% default values for groupings: all together, absolute
 if ~isfield(scOptions,'exp_groups') || ~isfield(scOptions.exp_groups,'bc_idxs')
     scOptions.exp_groups.bc_idxs{1} = 1:ne;
 end
@@ -277,23 +293,8 @@ if ~isfield(scOptions,'obs_groups') || ~isfield(scOptions.obs_groups,'noise_idxs
     scOptions.obs_groups.noise_mode{1} = 'absolute';
 end
 
-% check if modes of b,c are admissible
-
-n_expGroups_bc = numel(scOptions.exp_groups.bc_idxs);
-n_expGroups_noise = numel(scOptions.exp_groups.noise_idxs);
-n_obsGroups_bc     = numel(scOptions.obs_groups.bc_idxs);
-n_obsGroups_noise = numel(scOptions.obs_groups.noise_idxs);
-
-for ieg = 1:n_expGroups_bc
-    for iyg = 1:n_obsGroups_bc
-        b_mode = scOptions.obs_groups.b_mode{iyg};
-        c_mode = scOptions.obs_groups.c_mode{iyg};
-        if strcmp(b_mode,'multiple') && strcmp(c_mode,'single')...
-            || strcmp(b_mode,'single') && strcmp(c_mode,'multiple')
-            error('hieropt: not allowed combination of b_mode|c_mode single|multiple');
-        end
-    end
-end    
+% perform some simple checks whether all modes of b, c, noise are
+% admissible
 
 % check if all values sharing b,c also share noise (or noise
 % not-optimized)
