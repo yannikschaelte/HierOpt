@@ -1,5 +1,7 @@
 function [ ] = run_erbb(approach)
 
+rng(0);
+
 exdir = fileparts(which('run_erbb.m'));
 
 D = get_data_erbb();

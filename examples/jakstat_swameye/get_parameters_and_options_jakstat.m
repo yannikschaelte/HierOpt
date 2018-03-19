@@ -1,9 +1,9 @@
 function [parameters,options] = getParametersAndOptions_jakstat(approach)
 
-nStarts = 500;
+n_starts = 500;
 
 options.MS = PestoOptions();
-options.MS.n_starts = nStarts; % actually 500
+options.MS.n_starts = n_starts; % actually 500
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
@@ -16,24 +16,23 @@ options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
     'PrecondBandWidth', inf);
 options.MS.obj_type = 'negative log-posterior';
 
-nPar = 17; % maximum number of parameters
-minPar = -5*ones(nPar,1);
-maxPar = 3*ones(nPar,1);
-maxPar(4)  =  6;
-maxPar(2)  =  6;
-minPar(10) = -6;
-minPar(4)  = -3;
-minPar(2)  = -3;
+n_par = 17; % maximum number of parameters
+min_par = -5*ones(n_par,1);
+max_par = 3*ones(n_par,1);
+max_par(4)  =  6;
+max_par(2)  =  6;
+min_par(10) = -6;
+min_par(4)  = -3;
+min_par(2)  = -3;
 
-rng(0);
-par0 = bsxfun(@plus,minPar,bsxfun(@times,maxPar - minPar, lhsdesign(nStarts,nPar,'smooth','off')'));
+par0 = bsxfun(@plus,min_par,bsxfun(@times,max_par - min_par, lhsdesign(n_starts,n_par,'smooth','off')'));
    
 switch approach
     case 'standard'
-        nPar = 17;
+        n_par = 17;
         
     case 'hierarchical-adjoint'
-        nPar = 12;
+        n_par = 12;
         
         sc.exp_groups.bc_idxs = {1};
         sc.exp_groups.noise_idxs = {1};
@@ -49,7 +48,7 @@ switch approach
         options.sc = sc;
         
     case 'hierarchical-forward'
-        nPar = 12;
+        n_par = 12;
         
         sc.exp_groups.bc_idxs = {1};
         sc.exp_groups.noise_idxs = {1};
@@ -65,7 +64,7 @@ switch approach
         options.sc = sc;
         
     case 'hierarchical-forward-offsets'
-        nPar = 10;
+        n_par = 10;
 
         sc.exp_groups.bc_idxs = {1};
         sc.exp_groups.noise_idxs = {1};
@@ -81,7 +80,7 @@ switch approach
         options.sc = sc;
         
     case 'hierarchical-adjoint-offsets'
-        nPar = 10;
+        n_par = 10;
         
         
         sc.exp_groups.bc_idxs = {1};
@@ -99,9 +98,9 @@ switch approach
         
 end
 
-parameters.number = nPar;
-parameters.min = minPar(1:nPar,1);
-parameters.max = maxPar(1:nPar,1);
-parameters.guess = par0(1:nPar,1:nStarts);
+parameters.number = n_par;
+parameters.min = min_par(1:n_par,1);
+parameters.max = max_par(1:n_par,1);
+parameters.guess = par0(1:n_par,1:n_starts);
 
 end

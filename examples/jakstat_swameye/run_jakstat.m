@@ -1,5 +1,7 @@
 function [  ] = run_jakstat(approach)
 
+rng(0);
+
 exdir = fileparts(which('run_jakstat.m'));
 addpath(fullfile(exdir,'data'));
 addpath(fullfile(exdir,'models'));
