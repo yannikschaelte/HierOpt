@@ -83,7 +83,7 @@ ne = size(D,2);
 % forward simulation
 sim = struct([]);
 for ie = 1:ne
-    sol = simfun(D(ie).t,theta,D(ie).k,[],amiOptions);
+    sol = simfun(D(ie).t,theta,D(ie).condition,[],amiOptions);
     
     if (sol.status ~= 0)
         error('hieropt: could not integrate ODE.');

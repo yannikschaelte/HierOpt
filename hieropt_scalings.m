@@ -9,10 +9,10 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %           hieropt_nllh_forward, hieropt_nllh_adjoint with fields
 %     .y  : (unscaled) observable simulations
 %     .sy : sensitivities w.r.t. parameters (for forward approach)
-%   D()   : 1*ne struct array with fields (for each experiment)
-%     .t  : nt*1 array with time points
-%     .Y  : nt*ny matrix with observations
-%     .k  : nk*1 array with conditions
+%   D()             : 1*ne struct array with fields (for each experiment)
+%     .t            : nt*1 array with time points
+%     .Y            : nt*ny matrix with observations
+%     .condition    : nk*1 array with conditions
 %   scOptions          : struct containing options for hierarchical
 %                        approach
 %     .exp_groups      : struct containing options regarding experiment

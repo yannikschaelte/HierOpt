@@ -36,7 +36,7 @@ amiOptions.sensi = 0;
 sim = struct([]);
 for ie = 1:ne
     
-    kappa_e = [D(ie).k(:); zeros(n_obsGroups_notabs_b,1); ones(n_obsGroups_notabs_c,1)];
+    kappa_e = [D(ie).condition(:); zeros(n_obsGroups_notabs_b,1); ones(n_obsGroups_notabs_c,1)];
     
     sol = simfun(D(ie).t,theta,kappa_e,[],amiOptions);
     
@@ -90,7 +90,7 @@ else
             sigma_re = reshape(sigma_re,1,[]);
             sigma_re = repmat(sigma_re,length(D(ie).t),1);
             
-            kappa_re = [D(ie).k(:); b_re; c_re];
+            kappa_re = [D(ie).condition(:); b_re; c_re];
             
             amiData.t = D(ie).t;
             amiData.Y = D(ie).Y(:,:,ir);
