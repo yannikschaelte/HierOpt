@@ -1,4 +1,4 @@
-function [ c ] = hieropt_c_normal( arr_y, arr_h, arr_b, c_mode )
+function [ c ] = hieropt_c_normal( arr_y, arr_h, arr_noise, arr_b, c_mode )
 % [t,y,r,e]
 % assumptions: resolution(b) = resolution(c), resolution(b) \supset
 % resolution(sigma2)

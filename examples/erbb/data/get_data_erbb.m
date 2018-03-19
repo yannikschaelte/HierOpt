@@ -220,9 +220,8 @@ for iD = 1:length(D)
     D(iD).Sigma_Y = D(iD).Sigma_Y + 0.1*ones(size(D(iD).Sigma_Y));
 end
 
-% create amidata
 for iD = 1:length(D)
-    amiData(iD) = amidata(D(iD));
+    D(iD).noise = D(iD).Sigma_Y.^2;
 end
 
 end
