@@ -5,11 +5,14 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 % compute the optimal values.
 %
 % Parameters:
-%   sim
-%   D()
-%     .t
-%     .Y
-%     .k
+%   sim   : 1*ne struct array with simulations as generated in
+%           hieropt_nllh_forward, hieropt_nllh_adjoint with fields
+%     .y  : (unscaled) observable simulations
+%     .sy : sensitivities w.r.t. parameters (for forward approach)
+%   D()   : 1*ne struct array with fields (for each experiment)
+%     .t  : nt*1 array with time points
+%     .Y  : nt*ny matrix with observations
+%     .k  : nk*1 array with conditions
 %   scOptions:
 %     .exp_groups
 %       .bc_idxs
@@ -20,16 +23,16 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %       .c_mode        : 'multiple','single','absolute'
 %       .noise_idxs
 %       .noise_mode    : 'multiple','single','absolute'
-%     .noise_matrix    : nt*ny*nr*ne-matrix, for
-%                        noise_mode='absolute', optional
 %
 % Return Values:
-%   b
-%   c
-%   noise
-%   b_by_y      : optimal b value for each non-absolute group
-%   c_by_y
-%   noise_by_y
+%   b           : 1*ne cell array of nt*ny*nr matrices containing the
+%                 optimal offset-values
+%   c           : same for c
+%   noise       : same for noise
+%   b_by_y      : 1*ne cell array of nt*n_obs_groups_notabs*nr matrices
+%                 containing the b-values for each non-absolute obs-group
+%   c_by_y      : same for c
+%   noise_by_y  : same for noise
 % 
 % History:
 %   2018/01/12: Yannik Schaelte
