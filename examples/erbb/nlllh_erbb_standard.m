@@ -3,6 +3,7 @@ function [ varargout ] = nlllh_erbb_standard(theta, D)
 amiOptions.rtol = 1e-8;
 amiOptions.atol = 1e-16;
 amiOptions.maxsteps = 2e5;
+amiOptions.interpType = 2;
 amiOptions.sensi_meth = 'adjoint';
 
 % for every experiment and replicate, do the optimization

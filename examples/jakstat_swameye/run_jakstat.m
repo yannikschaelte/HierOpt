@@ -22,7 +22,7 @@ switch approach
     case 'hierarchical-adjoint-offsets'
         nllh = @(x) nllh_jakstat_hierarchical_adjoint_offsets(x,D,options.sc);
     otherwise
-        error('approach not recognized');
+        error('Approach not recognized.');
 end
 
 parameters_res = getMultiStarts(parameters,nllh,options.MS);

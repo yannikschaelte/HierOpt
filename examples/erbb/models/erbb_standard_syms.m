@@ -1,4 +1,4 @@
-function model = chen_standard_syms()
+function model = erbb_standard_syms()
 
 time = sym('t');
 model.param = 'log10';
