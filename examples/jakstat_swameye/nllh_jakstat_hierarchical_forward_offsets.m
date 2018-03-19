@@ -2,7 +2,7 @@ function [ varargout ]  = nllh_jakstat_hierarchical_forward_offsets(theta,D,scOp
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
-simfun = @simulate_jakstat_hierarchical_offsets;
+simfun = @simulate_jakstat_hierarchical_forward_offsets;
 
 switch nargout
     case 1

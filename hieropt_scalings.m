@@ -4,7 +4,7 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 % lists. These are then passed to the hieropt_b_normal, hieropt_c_normal 
 % and hieropt_noise_normal functions to compute the optimal values.
 %
-% Parameters:
+% Input:
 %   sim   : 1*ne struct array with simulations as generated in
 %           hieropt_nllh_forward, hieropt_nllh_adjoint with fields
 %     .y  : (unscaled) observable simulations
@@ -36,7 +36,7 @@ function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptio
 %                        entry j contains mode of nosie in group
 %                        nosie_idxs{j}
 %
-% Return Values:
+% Output:
 %   b           : 1*ne cell array of nt*ny*nr matrices containing the
 %                 optimal offset-values
 %   c           : same for c
@@ -109,7 +109,6 @@ for ie = 1:ne
 
     b_by_y{ie} = zeros(nt,n_obsGroups_notabs_b,nr);
     c_by_y{ie} = ones(nt,n_obsGroups_notabs_c,nr);
-    if isfield
     noise_by_y{ie} = ones(nt,n_obsGroups_notabs_noise,nr);
 end
 

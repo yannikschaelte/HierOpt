@@ -11,11 +11,11 @@ addpath(fullfile(exdir,'models'));
 switch approach
     case 'standard'
         nllh = @(x) nllh_jakstat_standard(x,D);
-    case 'hierarchical'
+    case 'hierarchical-forward'
         nllh = @(x) nllh_jakstat_hierarchical_forward(x,D,options.sc);
     case 'hierarchical-adjoint'
         nllh = @(x) nllh_jakstat_hierarchical_adjoint(x,D,options.sc);
-    case 'hierarchical-offsets'
+    case 'hierarchical-forward-offsets'
         nllh = @(x) nllh_jakstat_hierarchical_forward_offsets(x,D,options.sc);
     case 'hierarchical-adjoint-offsets'
         nllh = @(x) nllh_jakstat_hierarchical_adjoint_offsets(x,D,options.sc);

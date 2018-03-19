@@ -1,7 +1,7 @@
 % simulate_jakstat_hierarchical_adjoint_offsets.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit # in branch unknown branch in repo unknown repository.
+%   this routine was generated using AMICI commit fca5da754c7b6fa18dcd3b3b83660b3a39066d20 in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======
@@ -208,6 +208,7 @@ end
 if(length(kappa)<6)
     error('provided condition vector is too short');
 end
+options_ami.nr = size(kappa,2);
 init = struct();
 if(~isempty(options_ami.x0))
     if(size(options_ami.x0,2)~=1)
@@ -227,7 +228,7 @@ if(~isempty(options_ami.sx0))
     end
     init.sx0 = bsxfun(@times,options_ami.sx0,1./permute(chainRuleFactor(:),[2,1]));
 end
-sol = ami_jakstat_hierarchical_adjoint_offsets(tout,theta(1:10),kappa(1:6),options_ami,plist,pbar(plist+1),xscale,init,data);
+sol = ami_jakstat_hierarchical_adjoint_offsets(tout,theta(1:10),kappa(1:6,:),options_ami,plist,pbar(plist+1),xscale,init,data);
 if(nargout>1)
     varargout{1} = sol.status;
     varargout{2} = sol.t;

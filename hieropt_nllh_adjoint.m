@@ -1,9 +1,6 @@
 function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,D,amiOptions,scOptions )
-% hieropt_nllh_adjoint uses the hierarchical approach to compute the nllh.
-% Derivatives are computed using the adjoint approach.
-% For an example usage see
-% examples/HierOpt_Examples/jakstat_small/nllh_jakstat_hierarchical_adjoint
-% (_offsets).
+% hieropt_nllh_adjoint uses the hierarchical approach to compute the nllh,
+% and derivatives using adjoint sensitivity analysis.
 %
 % Parameters:
 %   simfun
@@ -48,13 +45,10 @@ for ie = 1:ne
     end
     
     sim(ie).y = sol.y;
-    if nargout > 1
-        sim(ie).sy = sol.sy;
-    end
 end
 
 % optimal scalings
-[b,c,noise,b_by_y,c_by_y,noise_by_y] = hieropt_scalings(sim,D,scOptions);
+[b,c,noise,b_by_y,c_by_y,~] = hieropt_scalings(sim,D,scOptions);
 
 % nllh, snllh, s2nllh
 
@@ -72,6 +66,8 @@ end
 if nargout == 1
     nllh = hieropt_nllh_forward(false,sim,D,b,c,noise);
 else
+    % we need to perform the backward integration to obtain sensitivities
+    
     nllh = 0;
     n_theta = length(theta);
     snllh = zeros(n_theta,1);

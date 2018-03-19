@@ -48,7 +48,7 @@ switch approach
         
         options.sc = sc;
         
-    case 'hierarchical'
+    case 'hierarchical-forward'
         nPar = 12;
         
         sc.exp_groups.bc_idxs = {1};
@@ -64,7 +64,7 @@ switch approach
         
         options.sc = sc;
         
-    case 'hierarchical-offsets'
+    case 'hierarchical-forward-offsets'
         nPar = 10;
 
         sc.exp_groups.bc_idxs = {1};

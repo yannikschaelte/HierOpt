@@ -36,7 +36,7 @@ for ie = 1:n_e
         amiData.condition = D(ie).k(:);
         amiData = amidata(amiData);
         
-        sol = simulate_jakstat([], theta, [], amiData, amiOptions);
+        sol = simulate_jakstat_standard([], theta, [], amiData, amiOptions);
         
         if (sol.status ~= 0)
             error('Could not integrate ODE.');

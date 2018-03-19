@@ -2,7 +2,7 @@ function [ varargout ]  = nllh_jakstat_hierarchical_forward(theta,D,scOptions)
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
-simfun = @simulate_jakstat_hierarchical;
+simfun = @simulate_jakstat_hierarchical_forward;
 
 switch nargout
     case 1
