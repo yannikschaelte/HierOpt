@@ -11,7 +11,7 @@ In the hieropt_b, hieropt_c and hieropt_noise functions, optimal values for offs
 
 ## Requirements
 
-The likelihood functions are defined so as to work directly with AMICI, and the examples use AMICI and the parameter estimation toolbox PESTO. Both toolboxes are freely available at [github.com/icb-dcm].
+The likelihood functions are defined so as to work directly with AMICI, and the examples use AMICI and the parameter estimation toolbox PESTO. Both toolboxes are freely available at [github.com/icb-dcm](https://github.com/icb-dcm).
 As mentioned before, due to the modularity of the HierOpt toolbox, it is however easy to replace the likelihood functions by own likelihoods, so that this toolbox has no real requirements and is generally applicable.
 
 ## Examples
