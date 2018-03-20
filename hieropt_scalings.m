@@ -165,6 +165,7 @@ for ieg = 1:n_expGroups_bc
         for irg = 1:n_repGroups_bc
             
             ind_r = rep_groups.bc_idxs{irg};
+            n_r = length(ind_r);
             
             % create vectors with all entries
             arr_y = [];
@@ -172,7 +173,7 @@ for ieg = 1:n_expGroups_bc
             arr_noise = [];
             for je = ind_e
                arr_y = [arr_y reshape(D(je).Y(:,ind_y,ind_r),1,[])];
-               arr_h = [arr_h reshape(sim(je).y(:,ind_y),1,[])];
+               arr_h = [arr_h repmat(reshape(sim(je).y(:,ind_y),1,[]),1,n_r)];
                arr_noise = [arr_h reshape(D(je).noise(:,ind_y,ind_r),1,[])];
             end
             
@@ -227,15 +228,15 @@ for ieg = 1:n_expGroups_noise
             case 'absolute'
                 % noise has already been set
                 continue;
-            case 'user-specified'
-                continue;
             otherwise
                 error('could not resolve input');
         end
         n_repGroups_noise = numel(rep_groups.noise_idxs);
         
         for irg = 1:n_repGroups_noise
+            
             ind_r = rep_groups.noise_idxs{irg};
+            n_r = length(ind_r);
             
             % create vectors with all entries
             arr_y = [];
@@ -244,7 +245,7 @@ for ieg = 1:n_expGroups_noise
             arr_b = [];
             for ie = ind_e
                arr_y = [arr_y reshape(D(ie).Y(:,ind_y,ind_r),1,[])];
-               arr_h = [arr_h reshape(sim(ie).y(:,ind_y),1,[])];
+               arr_h = [arr_h repmat(reshape(sim(je).y(:,ind_y),1,[]),1,n_r)];
                arr_c = [arr_c reshape(c{ie}(:,ind_y,ind_r),1,[])];
                arr_b = [arr_b reshape(b{ie}(:,ind_y,ind_r),1,[])];
             end
@@ -269,6 +270,7 @@ end
 function [ D ] = sanityCheckD(D)
     n_e = size(D,2);
     
+    % create noise matrices
     for je = 1:n_e
         if ~isfield(D(je),'condition')
             D(je).condition = [];
