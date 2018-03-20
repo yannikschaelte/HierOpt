@@ -33,7 +33,7 @@ for ie = 1:n_e
         amiData.t = D(ie).t;
         amiData.Y = D(ie).Y(:,:,ir);
         amiData.Sigma_Y = nan(size(amiData.Y));
-        amiData.condition = D(ie).k(:);
+        amiData.condition = D(ie).condition(:);
         amiData = amidata(amiData);
         
         sol = simulate_jakstat_standard([], theta, [], amiData, amiOptions);

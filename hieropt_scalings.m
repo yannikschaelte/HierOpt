@@ -116,9 +116,9 @@ for ie = 1:ne
     noise_by_y{ie} = ones(nt,n_obsGroups_notabs_noise,nr);
     iyg_notabs = 0;
     for iyg = 1:n_obsGroups_noise
-        if ~strcmp(options.obs_groups.noise_mode{iyg},'absolute')
+        if ~strcmp(scOptions.obs_groups.noise_mode{iyg},'absolute')
             iyg_notabs = iyg_notabs + 1;
-            noise_by_y{ie}(:,iyg_notabs,:) = D(ie).noise(:,options.obs_groups.noise_idxs{iyg}(1),:);
+            noise_by_y{ie}(:,iyg_notabs,:) = D(ie).noise(:,scOptions.obs_groups.noise_idxs{iyg}(1),:);
         end
     end
 end
@@ -174,7 +174,7 @@ for ieg = 1:n_expGroups_bc
             for je = ind_e
                arr_y = [arr_y reshape(D(je).Y(:,ind_y,ind_r),1,[])];
                arr_h = [arr_h repmat(reshape(sim(je).y(:,ind_y),1,[]),1,n_r)];
-               arr_noise = [arr_h reshape(D(je).noise(:,ind_y,ind_r),1,[])];
+               arr_noise = [arr_noise reshape(D(je).noise(:,ind_y,ind_r),1,[])];
             end
             
             % compute optimal b
