@@ -1,9 +1,9 @@
-function [parameters,options] = getParametersAndOptions_jakstat(approach)
+function [parameters,options] = get_parameters_and_options_jakstat(approach)
 
-n_starts = 500;
+n_starts = 20; % actually 500
 
 options.MS = PestoOptions();
-options.MS.n_starts = n_starts; % actually 500
+options.MS.n_starts = n_starts;
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
