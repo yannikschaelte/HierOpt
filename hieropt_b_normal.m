@@ -12,29 +12,34 @@ end
 
 arr_y = reshape(arr_y,1,[]);
 arr_h = reshape(arr_h,1,[]);
+arr_recnoise = reshape(1./arr_noise,[]); % reciprocal noise
 
-% count how many observables (i.e. ~= nan) we have
-count = sum(~isnan(arr_y));
+% unset values if not defined
+bad_indices = ~isfinite(arr_y) || ~isfinite(arr_h) || ~isfinite(arr_recnoise);
+arr_y(bad_indices) = 0;
+arr_h(bad_indices) = 0;
+arr_recnoise(bad_indices) = 0; % here 1/inf = 0
 
-% make h = 0 whenever y = 0 and vice versa
-arr_h = bsxfun(@times,~isnan(arr_y),arr_h);
-arr_y = bsxfun(@times,~isnan(arr_h),arr_y);
+sum_yh = nansum(arr_y .* arr_h .* arr_recnoise);
+sum_h2 = nansum(arr_h.^2 .* arr_recnoise);
+sum_h  = nansum(arr_h .* arr_recnoise);
+sum_y  = nansum(arr_y .* arr_recnoise);
+sum_recnoise = nansum(arr_recnoise);
 
-yh = nansum(bsxfun(@times,arr_y,arr_h));
-h2 = nansum(bsxfun(@power,arr_h,2));
+% formula for b for known c
 
 if strcmp(c_mode,'absolute')
-    b = nansum(arr_y-arr_h)/count;
+    b = nansum((arr_y-arr_h).*arr_recnoise)/sum_recnoise;
     return;
 end
 
-% else both b and c optimal
+% else formula for both b and c optimal
 
-numerator = nansum(arr_y-(yh/h2)*arr_h)/count;
-denominator = 1 - nansum((nansum(arr_h)/h2)*arr_h)/count;
+numerator = (sum_y - sum_yh*sum_h/sum_h2) / sum_recnoise;
+denominator = 1 - (sum_h^2 / sum_h2) / sum_recnoise;
 
 if abs(denominator) < eps
-warning('hieropt:opt_b_normal: data not diverse enough to compute scalings this way');
+warning('hieropt:opt_b_normal: data not diverse enough to compute scalings this way. setting b = 0.');
     b = 0;
 else
     b = numerator / denominator;
