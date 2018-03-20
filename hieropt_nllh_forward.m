@@ -38,9 +38,17 @@ if b_sim
     simfun = varargin{2};
     theta = varargin{3};
     D = varargin{4};
-    amiOptions = varargin{5};
-    scOptions = varargin{6};
-
+    if nargin > 4
+        amiOptions = varargin{5};
+    else
+        amiOptions = amioption();
+    end
+    if nargin > 5
+        scOptions = varargin{6};
+    else
+        scOptions = struct();
+    end
+    
     switch nargout
         case 1
             [varargout{1}] = hieropt_nllh_forward_withsim(simfun,theta,D,amiOptions,scOptions);

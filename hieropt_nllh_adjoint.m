@@ -15,6 +15,13 @@ function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,D,amiOptions,scOptio
 % History:
 %   2018/01/12: Yannik Schaelte
 
+if nargin <= 3
+    amiOptions = amioption();
+end
+if nargin <= 4
+    scOptions = struct();
+end
+
 ne = size(D,2);
 n_obsGroups_bc     = numel(scOptions.obs_groups.bc_idxs);
 
