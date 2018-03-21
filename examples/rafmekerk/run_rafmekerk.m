@@ -1,7 +1,12 @@
 function [  ] = run_rafmekerk(approach)
 
+rng(0);
+
 exdir=fileparts(which('run_rafmekerk'));
-[parameters,options] = getParametersAndOptions_rafmekerk(approach);
+addpath(fullfile(exdir,'data'));
+addpath(fullfile(exdir,'models'));
+
+[parameters,options] = get_parameters_and_options_rafmekerk(approach);
 
 switch approach
     case 'standard'
