@@ -1,4 +1,4 @@
-function [ amiData ] = get_data_erbb()
+function [ D ] = get_data_erbb()
 
 % Chen2009
 
@@ -220,6 +220,7 @@ for iD = 1:length(D)
     D(iD).Sigma_Y = D(iD).Sigma_Y + 0.1*ones(size(D(iD).Sigma_Y));
 end
 
+% it's called noise, not Sigma_Y, in the hierarchical toolbox
 for iD = 1:length(D)
     D(iD).noise = D(iD).Sigma_Y.^2;
 end
