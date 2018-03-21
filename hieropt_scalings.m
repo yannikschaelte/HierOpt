@@ -275,7 +275,7 @@ function [ D ] = sanityCheckD(D)
         if ~isfield(D(je),'condition')
             D(je).condition = [];
         end
-        if ~isfield(D(je),'noise')
+        if ~isfield(D(je),'noise') || isempty(D(je).noise)
             D(je).noise = ones(size(D(je).Y));
         end
     end
