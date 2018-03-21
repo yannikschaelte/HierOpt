@@ -5,19 +5,19 @@ exdir=fileparts(which('run_rafmekerk'));
 
 switch approach
     case 'standard'
-        load data_rafmekerk_noreps.mat
+        load('data_rafmekerk_noreps.mat','D');
         nllh = @(x) nllh_rafmekerk_standard(x,D);
-    case 'hierarchical'
-        load data_rafmekerk.mat
-        nllh = @(x) nllh_rafmekerk_hierarchical(x,D,options.sc);
+    case 'hierarchical-forward'
+        load('data_rafmekerk.mat','D');
+        nllh = @(x) nllh_rafmekerk_hierarchical_forward(x,D,options.sc);
     case 'hierarchical-adjoint'
-        load data_rafmekerk.mat
+        load('data_rafmekerk.mat','D');
         nllh = @(x) nllh_rafmekerk_hierarchical_adjoint(x,D,options.sc);
-    case 'hierarchical-noreps'
-        load data_rafmekerk_noreps.mat
-        nllh = @(x) nllh_rafmekerk_hierarchical_noreps(x,D,options.sc);
+    case 'hierarchical-noreps-forward'
+        load('data_rafmekerk_noreps.mat','D');
+        nllh = @(x) nllh_rafmekerk_hierarchical_noreps_forward(x,D,options.sc);
     case 'hierarchical-noreps-adjoint'
-        load data_rafmekerk_noreps.mat
+        load('data_rafmekerk_noreps.mat','D');
         nllh = @(x) nllh_rafmekerk_hierarchical_noreps_adjoint(x,D,options.sc);
     otherwise
         error('approach not recognized');

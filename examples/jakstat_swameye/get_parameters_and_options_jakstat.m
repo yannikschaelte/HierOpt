@@ -1,6 +1,6 @@
 function [parameters,options] = get_parameters_and_options_jakstat(approach)
 
-n_starts = 20; % actually 500
+n_starts = 100; % actually 500
 
 options.MS = PestoOptions();
 options.MS.n_starts = n_starts;

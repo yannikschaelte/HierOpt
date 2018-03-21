@@ -1,6 +1,6 @@
 function [parameters,options] = get_parameters_and_options_erbb()
 
-n_starts = 10;
+n_starts = 100;
 
 options.MS = PestoOptions();
 options.MS.n_starts = n_starts;

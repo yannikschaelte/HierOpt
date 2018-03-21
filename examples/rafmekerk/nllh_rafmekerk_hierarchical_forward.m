@@ -1,7 +1,7 @@
-function [varargout] = nllh_rafmekerk_hierarchical_noreps(theta,D,scOptions)
+function [varargout] = nllh_rafmekerk_hierarchical_forward(theta,D,scOptions)
 
 amiOptions = amioption();
-simfun = @simulate_rafmekerk_hierarchical_noreps;
+simfun = @simulate_rafmekerk_hierarchical;
 
 switch nargout
     case 1

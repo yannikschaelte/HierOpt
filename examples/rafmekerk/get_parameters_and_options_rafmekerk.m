@@ -1,6 +1,6 @@
-function [parameters,options] = getParametersAndOptions_rafmekerk(approach)
+function [parameters,options] = get_parameters_and_options_rafmekerk(approach)
 
-nStarts = 500;
+nStarts = 100;
 
 options.MS = PestoOptions();
 options.MS.n_starts = nStarts; % actually 500
@@ -26,7 +26,7 @@ par0 = bsxfun(@plus,minPar,bsxfun(@times,maxPar - minPar, lhsdesign(nStarts,nPar
 switch approach
     case 'standard'
         nPar = 28;
-    case {'hierarchical','hierarchical-adjoint'}
+    case {'hierarchical-forward','hierarchical-adjoint'}
         nPar = 12;
         
         sc.exp_groups.bc_idxs = {1:3};
@@ -42,7 +42,7 @@ switch approach
         
         options.sc = sc;
         
-    case {'hierarchical-noreps','hierarchical-noreps-adjoint'}
+    case {'hierarchical-noreps-forward','hierarchical-noreps-adjoint'}
         nPar = 12;
         
         sc.exp_groups.bc_idxs = {1:3};
