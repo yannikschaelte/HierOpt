@@ -26,7 +26,7 @@ par0 = bsxfun(@plus,min_par,bsxfun(@times,max_par - min_par, lhsdesign(n_starts,
 switch approach
     case 'standard'
         % nothing to be done
-    case 'hierarchical-adjoint'
+    case {'hierarchical-forward','hierarchical-adjoint'}
         n_par = n_par - 3;
         sc.exp_groups.bc_idxs = {1,2,3};
         sc.exp_groups.noise_idxs = {1,2,3};
