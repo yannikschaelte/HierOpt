@@ -1,7 +1,7 @@
 % simulate_jakstat_hierarchical_forward_offsets.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit fca5da754c7b6fa18dcd3b3b83660b3a39066d20 in branch master in repo .
+%   this routine was generated using AMICI commit fca5da754c7b6fa18dcd3b3b83660b3a39066d20 in branch master in repo https://github.com/icb-dcm/amici.
 %
 % USAGE:
 % ======

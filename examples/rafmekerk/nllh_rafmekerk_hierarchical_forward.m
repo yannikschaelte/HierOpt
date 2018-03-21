@@ -1,7 +1,7 @@
 function [varargout] = nllh_rafmekerk_hierarchical_forward(theta,D,scOptions)
 
 amiOptions = amioption();
-simfun = @simulate_rafmekerk_hierarchical;
+simfun = @simulate_rafmekerk_hierarchical_forward;
 
 switch nargout
     case 1
@@ -12,7 +12,6 @@ switch nargout
             theta,D,amiOptions,scOptions);
     case 3
         [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward(true,simfun,...
-            @simulate_jakstat_hierarchical,...
             theta,D,amiOptions,scOptions);
 end
 

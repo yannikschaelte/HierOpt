@@ -12,7 +12,7 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     if (nargout == 1)
         amiOptions.sensi = 0;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).condition, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
@@ -22,7 +22,7 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     elseif (nargout == 2)
         amiOptions.sensi = 1;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).condition, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
@@ -33,7 +33,7 @@ function [varargout] = nllh_rafmekerk_standard(theta, D)
     elseif (nargout == 3)
         amiOptions.sensi = 2;
         for j = 1 : 3
-            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).k, D(j), amiOptions);
+            sol = simulate_rafmekerk_standard(D(j).t, theta, D(j).condition, D(j), amiOptions);
             if sol.status < 0
                 llh = -inf;
             end
