@@ -1,4 +1,4 @@
-function [ varargout ] = nlllh_erbb_standard(theta, D)
+function [ varargout ] = nllh_erbb_standard(theta, D)
 
 amiOptions.rtol = 1e-8;
 amiOptions.atol = 1e-16;
