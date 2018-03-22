@@ -1,4 +1,4 @@
-function [parameters,options] = get_parameters_and_options_erbb()
+function [parameters,options] = get_parameters_and_options_erbb(approach)
 
 n_starts = 100;
 
