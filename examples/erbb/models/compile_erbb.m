@@ -1,4 +1,4 @@
-exdir = fileparts(which('erbb_standard.m'));
+exdir = fileparts(which('erbb_standard_syms.m'));
 
 o2flag = 0;
 
