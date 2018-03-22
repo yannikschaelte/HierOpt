@@ -16,7 +16,7 @@ options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
 options.MS.obj_type = 'negative log-posterior';
 
 load('erbb_signaling_pnom.mat','pnom');
-theta = log10(pnom);
+theta = log10(pnom+0.01); % some parameters are 0
 n_par = length(theta);
 min_par = theta - 2;
 max_par = theta + 3;

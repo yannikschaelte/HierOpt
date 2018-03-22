@@ -1,4 +1,4 @@
-function [ varargout ] = nllh_erbb_hierarchical_adjoint(theta, D)
+function [ varargout ] = nllh_erbb_hierarchical_adjoint(theta, D, scOptions)
 
 amiOptions.rtol = 1e-8;
 amiOptions.atol = 1e-16;

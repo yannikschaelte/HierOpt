@@ -13,6 +13,8 @@ D = get_data_erbb();
 switch approach
     case 'standard'
         nllh = @(x) nllh_erbb_standard(x,D);
+    case 'hierarchical-forward'
+        nllh = @(x) nllh_erbb_hierarchical_forward(x,D,options.sc);
     case 'hierarchical-adjoint'
         nllh = @(x) nllh_erbb_hierarchical_adjoint(x,D,options.sc);
     otherwise
