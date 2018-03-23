@@ -171,10 +171,10 @@ for ieg = 1:n_expGroups_bc
             arr_y = [];
             arr_h = [];
             arr_noise = [];
-            for je = ind_e
-               arr_y = [arr_y reshape(D(je).Y(:,ind_y,ind_r),1,[])];
-               arr_h = [arr_h repmat(reshape(sim(je).y(:,ind_y),1,[]),1,n_r)];
-               arr_noise = [arr_noise reshape(D(je).noise(:,ind_y,ind_r),1,[])];
+            for ie = ind_e
+               arr_y = [arr_y reshape(D(ie).Y(:,ind_y,ind_r),1,[])];
+               arr_h = [arr_h repmat(reshape(sim(ie).y(:,ind_y),1,[]),1,n_r)];
+               arr_noise = [arr_noise reshape(D(ie).noise(:,ind_y,ind_r),1,[])];
             end
             
             % compute optimal b
@@ -245,7 +245,7 @@ for ieg = 1:n_expGroups_noise
             arr_b = [];
             for ie = ind_e
                arr_y = [arr_y reshape(D(ie).Y(:,ind_y,ind_r),1,[])];
-               arr_h = [arr_h repmat(reshape(sim(je).y(:,ind_y),1,[]),1,n_r)];
+               arr_h = [arr_h repmat(reshape(sim(ie).y(:,ind_y),1,[]),1,n_r)];
                arr_c = [arr_c reshape(c{ie}(:,ind_y,ind_r),1,[])];
                arr_b = [arr_b reshape(b{ie}(:,ind_y,ind_r),1,[])];
             end
