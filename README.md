@@ -16,4 +16,10 @@ As mentioned before, due to the modularity of the HierOpt toolbox, it is however
 
 ## Examples
 
-In the examples, the hierarchical approach is used to perform parameter estimation on Systems Biology ODE models. To compute derivatives of the objective function, both the forward and adjoint approach can be used.
+In the examples, the hierarchical approach is used to perform parameter estimation on Systems Biology ODE models. The considered models are
+
+* [jakstat_swameye](examples/jakstat_swameye): a model of the JakStat signaling pathway with time-resolved input ofthe drug EPO,
+* [rafmekerk](examples/rafmekerk): a model of the RafMekErk signaling pathway,
+* [erbb](examples/erbb):  a model of ErbB signaling pathways.
+
+ To compute derivatives of the objective function, both the forward and adjoint approach can be used.

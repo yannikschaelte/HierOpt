@@ -1,0 +1,3 @@
+Model of the JakStat signaling pathway with time-resolved input of the drug EPO. The model is taken from the papers [Identification of nucleocytoplasmic cycling as a remote sensor in cellular signaling by databased modeling. Swameye et al., 2003, PNAS vol. 100 no. 3] and [Comprehensive estimation of input signals and dynamics in biochemical reaction networks. Schelker et al., 2012, Bioinformatics, vol. 28].
+
+The data used is measurement data provided in the publication.
