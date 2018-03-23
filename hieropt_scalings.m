@@ -180,7 +180,7 @@ for ieg = 1:n_expGroups_bc
             end
             
             % compute optimal b
-            tmp_b = hieropt_b_normal(arr_y,arr_h,arr_noise,b_mode,c_mode);
+            tmp_b = hieropt_b(arr_y,arr_h,arr_noise,b_mode,c_mode,scOptions.distribution);
             for ie = ind_e
                 b{ie}(:,ind_y,ind_r) = tmp_b;
                 if ~strcmp(b_mode,'absolute')
@@ -191,7 +191,7 @@ for ieg = 1:n_expGroups_bc
             arr_b = tmp_b*ones(size(arr_y));
             
             % compute optimal c
-            tmp_c = hieropt_c_normal(arr_y,arr_h,arr_noise,arr_b,c_mode);
+            tmp_c = hieropt_c(arr_y,arr_h,arr_noise,arr_b,c_mode,scOptions.distribution);
             for ie = ind_e
                 c{ie}(:,ind_y,ind_r) = tmp_c;
                 if ~strcmp(c_mode,'absolute')
@@ -253,7 +253,7 @@ for ieg = 1:n_expGroups_noise
             end
             
             % compute optimal noise
-            tmp_noise = hieropt_noise_normal(arr_y,arr_h,arr_b,arr_c);
+            tmp_noise = hieropt_noise(arr_y,arr_h,arr_b,arr_c,scOptions.distribution);
             for ie = ind_e
                 noise{ie}(:,ind_y,ind_r) = tmp_noise;
             end
