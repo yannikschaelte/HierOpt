@@ -34,11 +34,15 @@ arr_y(bad_indices) = 0;
 arr_h(bad_indices) = 0;
 arr_recnoise(bad_indices) = 0; % here 1/inf = 0
 
-dJdb = @(b) - sum
+f_dJdb = @(b, c) - nansum(arr_recnoise * sign(arr_y - c*arr_h - b));
+dim = length(arr_y);
 
 if strcmp(c_mode, 'absolute')
     b_can = arr_y - arr_h;
-    
+    dJdB_can = zeros(dim+1,1);
+    for j = 1:dim+1
+        dJdB_can(j) = f_dJdb();%TODO
+    end
 end
     
 end
