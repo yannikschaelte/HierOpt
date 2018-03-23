@@ -22,4 +22,4 @@ In the examples, the hierarchical approach is used to perform parameter estimati
 * [rafmekerk](examples/rafmekerk): a model of the RafMekErk signaling pathway,
 * [erbb](examples/erbb):  a model of ErbB signaling pathways.
 
- To compute derivatives of the objective function, both the forward and adjoint approach can be used.
+To compute derivatives of the objective function, both the forward and adjoint approach can be used in each of the models. The forward approach will usually be beneficial in small-scale models, whereas for large-scale models the adjoint approach can be considerably more efficient.
