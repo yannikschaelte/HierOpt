@@ -5,6 +5,8 @@ function [ b ] = hieropt_b_normal( arr_y, arr_h, arr_noise, b_mode, c_mode )
 %   arr_y     : observations
 %   arr_h     : unscaled simulations
 %   arr_noise : sigma2 noise
+%               we assume that either arr_noise = const., or 
+%               noise_mode = 'absolute' (for the formulas to make sense)
 %   b_mode    : mode how b shall be computed. If 'absolute', just 0 is
 %               returned, otherwise the optimal value computed.
 %   c_mode    : mode how c shall be computed, determines the formula for b

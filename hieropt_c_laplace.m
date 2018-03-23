@@ -5,6 +5,8 @@ function [ c ] = hieropt_c_laplace( arr_y, arr_h, arr_noise, arr_b, c_mode )
 %   arr_y     : observations
 %   arr_h     : unscaled simulations
 %   arr_noise : sigma2 noise
+%               we assume that either arr_noise = const., or 
+%               noise_mode = 'absolute' (for the formulas to make sense)
 %   arr_b     : previously computed offset values
 %   c_mode    : mode how c shall be computed. If 'absolute', just 1 is
 %               returned, otherwise the optimal value computed.
