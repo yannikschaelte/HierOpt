@@ -1,4 +1,4 @@
-function [ b,c,noise,b_by_y,c_by_y,noise_by_y ] = hieropt_scalings(sim,D,scOptions)
+function [ b, c, noise, b_by_y, c_by_y, noise_by_y ] = hieropt_scalings(sim, D, scOptions)
 % hieropt_scalings computes the optimal scalings (b,c,noise). For this aim,
 % all values belonging to one group are aggregated and put into 1-dim 
 % lists. These are then passed to the hieropt_b_normal, hieropt_c_normal 

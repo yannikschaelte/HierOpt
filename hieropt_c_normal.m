@@ -1,4 +1,20 @@
 function [ c ] = hieropt_c_normal( arr_y, arr_h, arr_noise, arr_b, c_mode )
+% Computes the optimal proportionality parameter in a gaussian model.
+%
+% Input:
+%   arr_y     : observations
+%   arr_h     : unscaled simulations
+%   arr_noise : sigma2 noise
+%   arr_b     : previously computed offset values
+%   c_mode    : mode how c shall be computed. If 'absolute', just 1 is
+%               returned, otherwise the optimal value computed.
+%
+% Output:
+%   c         : optimal proportionality factor
+%
+% History:
+%   2018/03/23: Yannik Schaelte
+
 % [t,y,r,e]
 % assumptions: resolution(b) = resolution(c), resolution(b) \supset
 % resolution(sigma2)

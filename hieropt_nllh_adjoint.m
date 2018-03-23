@@ -1,15 +1,17 @@
-function [ varargout ] = hieropt_nllh_adjoint( simfun,theta,D,amiOptions,scOptions )
+function [ varargout ] = hieropt_nllh_adjoint( simfun, theta, D, amiOptions, scOptions )
 % hieropt_nllh_adjoint uses the hierarchical approach to compute the nllh,
 % and derivatives using adjoint sensitivity analysis.
+% The objective function interface must be that of the DE integration 
+% toolbox AMICI.
 %
-% Parameters:
+% Input:
 %   simfun
 %   theta
 %   D
 %   amiOptions
 %   scOptions
 %
-% Return Values:
+% Output:
 %   [nllh,snllh,s2nllh]
 %
 % History:

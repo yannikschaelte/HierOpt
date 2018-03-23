@@ -6,11 +6,11 @@ function [ varargout ] = hieropt_nllh_forward( varargin )
 % The function can be run in two modes: Either a simulation function is
 % passed (b_sim = true), or only the simulated values and the optimal
 % scalings (obtained from hieropt_scalings) are passed.
-% For an example usage see
-% examples/HierOpt_Examples/jakstat_small/nllh_jakstat_hierarchical
-% (_offsets).
 %
-% Parameters:
+% The objective function interface must be that of the DE integration 
+% toolbox AMICI.
+%
+% Input:
 %   b_sim
 %   if b_sim == true
 %     simfun
@@ -25,7 +25,7 @@ function [ varargout ] = hieropt_nllh_forward( varargin )
 %     c
 %     noise
 %
-% Return Values:
+% Output:
 %  [nllh,snllh,s2nllh]
 %
 % History:
