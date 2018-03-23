@@ -17,6 +17,8 @@ function [ b, c, noise, b_by_y, c_by_y, noise_by_y ] = hieropt_scalings(sim, D, 
 %     .condition    : nk*1 array with conditions (optional)
 %   scOptions          : struct containing options for hierarchical
 %                        approach
+%     .distribution    : 'normal','laplace'
+%                        underlying error distribution model
 %     .exp_groups      : struct containing options regarding experiment
 %                        groups
 %       .bc_idxs       : cell array, entry j contains indices of
