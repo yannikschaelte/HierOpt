@@ -1,6 +1,6 @@
 # HierOpt
 
-A MatLab toolbox for the analytical hierarchical computation of scaling and noise parameters. 
+A MatLab toolbox for the analytical **hierarchical optimization** of scaling and noise parameters. 
 
 Currently, it supports proportionality, offset and noise parameters for normally distributed errors.
 
