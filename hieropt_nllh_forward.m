@@ -1,5 +1,6 @@
 function [ varargout ] = hieropt_nllh_forward( varargin )
-% hieropt_nllh_foroward uses the hierarchical approach to compute the nllh.
+% Uses the hierarchical approach to compute the nllh.
+%
 % The first derivative is computed using the forward approach, additionally
 % a FIM approximation to the second derivative can be obtained as third
 % return value.

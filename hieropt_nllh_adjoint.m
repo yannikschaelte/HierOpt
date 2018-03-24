@@ -3,6 +3,8 @@ function [ varargout ] = hieropt_nllh_adjoint( simfun, theta, D, amiOptions, scO
 % and derivatives using adjoint sensitivity analysis.
 % The objective function interface must be that of the DE integration 
 % toolbox AMICI.
+% The llh and derivatives returned by the simfun in field sim.llh must
+% correspond to the error model specified in scOptions.distribution.
 %
 % Input:
 %   simfun

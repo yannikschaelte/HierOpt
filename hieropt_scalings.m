@@ -179,25 +179,21 @@ for ieg = 1:n_expGroups_bc
                arr_noise = [arr_noise reshape(D(ie).noise(:,ind_y,ind_r),1,[])];
             end
             
-            % compute optimal b
-            tmp_b = hieropt_b(arr_y,arr_h,arr_noise,b_mode,c_mode,scOptions.distribution);
+            % compute optimal b and c
+            [tmp_b, tmp_c] = hieropt_bc(arr_y,arr_h,arr_noise,b_mode,c_mode,scOptions.distribution);
+            
+            % store
             for ie = ind_e
                 b{ie}(:,ind_y,ind_r) = tmp_b;
+                c{ie}(:,ind_y,ind_r) = tmp_c;
                 if ~strcmp(b_mode,'absolute')
                     b_by_y{ie}(:,i_obsGroups_notabs_b,ind_r) = tmp_b;
                 end
-            end
-            
-            arr_b = tmp_b*ones(size(arr_y));
-            
-            % compute optimal c
-            tmp_c = hieropt_c(arr_y,arr_h,arr_noise,arr_b,c_mode,scOptions.distribution);
-            for ie = ind_e
-                c{ie}(:,ind_y,ind_r) = tmp_c;
                 if ~strcmp(c_mode,'absolute')
                     c_by_y{ie}(:,i_obsGroups_notabs_c,ind_r) = tmp_c;
                 end
             end
+            
         end
         
     end

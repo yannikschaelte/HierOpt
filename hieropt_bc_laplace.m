@@ -1,5 +1,7 @@
-function [ b ] = hieropt_b_laplace( arr_y, arr_h, arr_noise, b_mode, c_mode )
-% Computes the optimal offset parameter in a gaussian model.
+function [ b, c ] = hieropt_bc_laplace( arr_y, arr_h, arr_noise, b_mode, c_mode )
+% Computes the optimal offset and proportionality parameters in a Laplace
+% noise model. If b_mode or c_mode equals 'absolute', the returned value is 
+% simply 0 or 1, respectively.
 %
 % Input:
 %   arr_y     : observations
