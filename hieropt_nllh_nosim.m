@@ -95,7 +95,7 @@ for ie = 1:n_e
                 end
             end
         end
-    end
+    end % if
 end
 
 varargout{1} = nllh;
@@ -128,8 +128,23 @@ for ie = 1:n_e
     c_e = c{ie};
     noise_e = noise{ie};
     
-    y_ch = bsxfun(@minus,D(ie).Y,bsxfun(@times,c_e,sim(ie).y)+b_e);
+    y_e = D(ie).Y;
+    h_e = repmat(sim(ie).y, [1,1,n_r]);
     
+    y_ch = y_e - ( c_e .* h_e + b_e );
+    
+    nllh = nllh + sum(sum(nansum(...
+        ~isnan(y_e).*log(2*noise_e) + abs(y_ch) ./noise_e,...
+        3),2),1);
+    
+    if nargout > 1
+        sh_e = permute(repmat(sim(ie).sy, [1,1,1,n_r]), [1,2,4,3]);
+        dy_ch = - c_e .* sh_e;
+        
+        grad = grad - squeeze(sum(sum(nansum(...
+            sign(y_ch) ./ noise_e .* dy_ch,...
+            1),2),3));
+    end % if
 end
 
 varargout{1} = nllh;
