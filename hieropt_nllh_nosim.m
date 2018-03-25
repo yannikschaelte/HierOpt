@@ -96,7 +96,7 @@ for ie = 1:n_e
                 end
             end
         end
-    end % if
+    end
 end
 
 varargout{1} = nllh;
@@ -144,10 +144,10 @@ for ie = 1:n_e
         sh_e = permute(repmat(sim(ie).sy, [1,1,1,n_r]), [1,2,4,3]);
         dy_ch = - c_e .* sh_e;
         
-        grad = grad - squeeze(sum(sum(nansum(...
+        grad = grad + squeeze(sum(sum(nansum(...
             sign(y_ch) ./ noise_e .* dy_ch,...
             1),2),3));
-    end % if
+    end
 end
 
 varargout{1} = nllh;

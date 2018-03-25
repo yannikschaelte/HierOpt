@@ -249,7 +249,9 @@ for ieg = 1:n_expGroups_noise
             end
             
             % compute optimal noise
-            tmp_noise = hieropt_noise(arr_y,arr_h,arr_b,arr_c,scOptions.distribution);
+            tmp_noise = hieropt_noise(arr_y,arr_h,arr_b,arr_c,noise_mode,scOptions.distribution);
+            
+            % fill output
             for ie = ind_e
                 noise{ie}(:,ind_y,ind_r) = tmp_noise;
             end
