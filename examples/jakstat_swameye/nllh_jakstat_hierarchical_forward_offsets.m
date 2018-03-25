@@ -6,15 +6,11 @@ simfun = @simulate_jakstat_hierarchical_forward_offsets;
 
 switch nargout
     case 1
-        [varargout{1}] = hieropt_nllh_forward(true,simfun,...
-            theta,D,amiOptions,scOptions);
+        [varargout{1}] = hieropt_nllh_forward(simfun,theta,D,amiOptions,scOptions);
     case 2
-        [varargout{1},varargout{2}] = hieropt_nllh_forward(true,simfun,...
-            theta,D,amiOptions,scOptions);
+        [varargout{1},varargout{2}] = hieropt_nllh_forward(simfun,theta,D,amiOptions,scOptions);
     case 3
-        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward(true,simfun,...
-            @simulate_jakstat_hierarchical,...
-            theta,D,amiOptions,scOptions);
+        [varargout{1},varargout{2},varargout{3}] = hieropt_nllh_forward(simfun,theta,D,amiOptions,scOptions);
 end
 
 end
