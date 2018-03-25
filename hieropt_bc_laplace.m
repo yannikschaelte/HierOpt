@@ -19,32 +19,36 @@ function [ b, c ] = hieropt_bc_laplace( arr_y, arr_h, arr_noise, b_mode, c_mode 
 % History:
 %   2018/03/23: Yannik Schaelte
 
-if strcmp(b_mode, 'absolute')
-    b = 0;
-    return;
-end
-
 % else compute optimal value
 
 arr_y = reshape(arr_y,1,[]);
 arr_h = reshape(arr_h,1,[]);
-arr_recnoise = reshape(1./arr_noise,1,[]); % reciprocal noise
+arr_noise = reshape(arr_noise,1,[]);
 
-% unset values if not defined
-bad_indices = ~isfinite(arr_y) | ~isfinite(arr_h) | ~isfinite(arr_recnoise);
-arr_y(bad_indices) = 0;
-arr_h(bad_indices) = 0;
-arr_recnoise(bad_indices) = 0; % here 1/inf = 0
-
-f_dJdb = @(b, c) - nansum(arr_recnoise * sign(arr_y - c*arr_h - b));
 dim = length(arr_y);
 
-if strcmp(c_mode, 'absolute')
-    b_can = arr_y - arr_h;
-    dJdB_can = zeros(dim+1,1);
-    for j = 1:dim+1
-        dJdB_can(j) = f_dJdb();%TODO
-    end
+J = @(b,c) nansum( log(2*arr_noise) + abs( arr_y - (c*arr_h + b) ) ./ arr_noise);
+
+if strcmp(b_mode, 'absolute')
+   b = 0;
+   
+   if strcmp(c_mode, 'absolute')
+       c = 1;
+       return;
+   end
+   
+   c_can = arr_y ./ arr_h;
+   
+   % determine minimum value
+   J_can = nan(dim,1);
+   for j = 1:dim
+       if isfinite(c_can(j))
+           J_can(j) = J(0,c_can(j));
+       end
+   end
+   
+   [~,i_min] = min(J_can);
+   c = c_can(i_min);
 end
     
 end

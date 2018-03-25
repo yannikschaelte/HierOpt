@@ -43,6 +43,11 @@ arr_recnoise(bad_indices) = 0; % here 1/inf = 0
 sum_yh = nansum((arr_y - arr_b) .* arr_h .* arr_recnoise);
 sum_h2 = nansum(arr_h.^2 .*arr_recnoise);
 
+if abs(sum_h2) < eps
+    c = 1;
+    return;
+end
+
 c = sum_yh / sum_h2;
 
 end % function

@@ -1,4 +1,4 @@
-function [  ] = run_jakstat(approach)
+function [  ] = run_jakstat(approach, distribution)
 
 rng(0);
 
@@ -9,6 +9,7 @@ addpath(fullfile(exdir,'models'));
 load('data_jakstat','D');
 
 [parameters,options] = get_parameters_and_options_jakstat(approach);
+options.sc.distribution = distribution;
 
 switch approach
     case 'standard'

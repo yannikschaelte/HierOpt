@@ -38,7 +38,7 @@ switch distribution
             case 1
                 [varargout{1}] = nllh_laplace(sim,D,b,c,noise);
             case 2
-                [varargout{1}] = nllh_laplace(sim,D,b,c,noise);
+                [varargout{1},varargout{2}] = nllh_laplace(sim,D,b,c,noise);
             case 3
                 error('hieropt:nllh_nosim',"FIM not supported for Laplace errors");
         end
@@ -66,6 +66,7 @@ end
 % compute output
 for ie = 1:n_e
     n_r = size(D(ie).Y,3);
+    
     b_e = b{ie};
     c_e = c{ie};
     noise_e = noise{ie};
@@ -124,6 +125,8 @@ end
 
 % compute output
 for ie = 1:n_e
+    n_r = size(D(ie).Y,3);
+    
     b_e = b{ie};
     c_e = c{ie};
     noise_e = noise{ie};
