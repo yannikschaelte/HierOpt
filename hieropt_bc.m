@@ -28,7 +28,7 @@ switch distribution
         [b,c] = hieropt_bc_laplace(arr_y,arr_h,arr_noise,b_mode,c_mode);
     
     otherwise
-        error('Distributon not recognized.');
+        error('hieropt:bc',"Distributon not recognized.");
 
 end
 

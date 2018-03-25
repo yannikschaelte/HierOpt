@@ -21,7 +21,7 @@ switch distribution
     case 'laplace'
         noise = hieropt_noise_laplace(arr_y,arr_h,arr_b,arr_c);
     otherwise
-        error('Distribution not recognized.');
+        error('hieropt:noise',"Distribution not recognized.");
         
 end
 

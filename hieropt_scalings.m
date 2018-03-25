@@ -227,7 +227,7 @@ for ieg = 1:n_expGroups_noise
                 % noise has already been set
                 continue;
             otherwise
-                error('could not resolve input');
+                error('hieropt:scalings',"Mode not recognized.");
         end
         n_repGroups_noise = numel(rep_groups.noise_idxs);
         

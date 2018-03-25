@@ -52,7 +52,7 @@ for ie = 1:ne
     sol = simfun(D(ie).t,theta,kappa_e,[],amiOptions);
     
     if (sol.status ~= 0)
-        error('hieropt: could not integrate ODE.');
+        error('hieropt:nllh', "Could not integrate ODE.");
     end
     
     sim(ie).y = sol.y;
@@ -75,7 +75,7 @@ switch nargout
 end
 
 if nargout == 1
-    nllh = hieropt_nllh_forward(false,sim,D,b,c,noise);
+    nllh = hieropt_nllh_nosim(sim,D,b,c,noise);
 else
     % we need to perform the backward integration to obtain sensitivities
     
