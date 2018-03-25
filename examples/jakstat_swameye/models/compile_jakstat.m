@@ -7,3 +7,7 @@ amiwrap('jakstat_hierarchical_forward','jakstat_hierarchical_forward_syms',exdir
 amiwrap('jakstat_hierarchical_forward_offsets','jakstat_hierarchical_forward_offsets_syms',exdir,o2flag);
 amiwrap('jakstat_hierarchical_adjoint','jakstat_hierarchical_adjoint_syms',exdir,o2flag);
 amiwrap('jakstat_hierarchical_adjoint_offsets','jakstat_hierarchical_adjoint_offsets_syms',exdir,o2flag);
+
+amiwrap('jakstat_laplace_standard','jakstat_laplace_standard_syms',exdir,o2flag);
+amiwrap('jakstat_laplace_hierarchical_adjoint','jakstat_laplace_hierarchical_adjoint_syms',exdir,o2flag);
+amiwrap('jakstat_laplace_hierarchical_adjoint_offsets','jakstat_laplace_hierarchical_adjoint_offsets_syms',exdir,o2flag);

@@ -1,7 +1,12 @@
 function [varargout] = nllh_rafmekerk_hierarchical_adjoint(theta,D,scOptions)
 
 amiOptions = amioption();
-simfun = @simulate_rafmekerk_hierarchical_adjoint;
+switch scOptions.distribution
+    case 'normal'
+        simfun = @simulate_rafmekerk_hierarchical_adjoint;
+    case 'laplace'
+        simfun = @simulate_rafmekerk_laplace_hierarchical_adjoint;
+end
 
 switch nargout
     case 1

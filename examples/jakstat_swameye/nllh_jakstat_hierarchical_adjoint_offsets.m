@@ -2,7 +2,13 @@ function [ varargout ] = nllh_jakstat_hierarchical_adjoint_offsets(theta,D,scOpt
 
 amiOptions.rtol = 1e-12;
 amiOptions.atol = 1e-14;
-simfun = @simulate_jakstat_hierarchical_adjoint_offsets;
+
+switch scOptions.distribution
+    case 'normal'
+        simfun = @simulate_jakstat_hierarchical_adjoint_offsets;
+    case 'laplace'
+        simfun = @simulate_jakstat_laplace_hierarchical_adjoint_offsets;
+end
 
 switch nargout
     case 1

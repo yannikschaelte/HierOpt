@@ -1,4 +1,11 @@
-function [ varargout ] = nllh_jakstat_standard(theta, D)
+function [ varargout ] = nllh_jakstat_standard(theta, D, scOptions)
+
+switch scOptions.distribution
+    case 'normal'
+        simfun = @simulate_jakstat_standard;
+    case 'laplace'
+        simfun = @simulate_jakstat_laplace_standard;
+end
 
 amiOptions.rtol = 1e-10;
 amiOptions.atol = 1e-10;
@@ -36,7 +43,7 @@ for ie = 1:n_e
         amiData.condition = D(ie).condition(:);
         amiData = amidata(amiData);
         
-        sol = simulate_jakstat_standard([], theta, [], amiData, amiOptions);
+        sol = simfun([], theta, [], amiData, amiOptions);
         
         if (sol.status ~= 0)
             error('Could not integrate ODE.');

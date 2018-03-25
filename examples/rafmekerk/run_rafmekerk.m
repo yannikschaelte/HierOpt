@@ -1,4 +1,4 @@
-function [  ] = run_rafmekerk(approach)
+function [  ] = run_rafmekerk(approach, distribution)
 
 rng(0);
 
@@ -7,11 +7,12 @@ addpath(fullfile(exdir,'data'));
 addpath(fullfile(exdir,'models'));
 
 [parameters,options] = get_parameters_and_options_rafmekerk(approach);
+options.sc.distribution = distribution;
 
 switch approach
     case 'standard'
         load('data_rafmekerk_noreps.mat','D');
-        nllh = @(x) nllh_rafmekerk_standard(x,D);
+        nllh = @(x) nllh_rafmekerk_standard(x,D,scOptions);
     case 'hierarchical-forward'
         load('data_rafmekerk.mat','D');
         nllh = @(x) nllh_rafmekerk_hierarchical_forward(x,D,options.sc);
