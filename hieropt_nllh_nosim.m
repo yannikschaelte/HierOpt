@@ -73,7 +73,7 @@ for ie = 1:n_e
     y_e = D(ie).Y;
     h_e = repmat(sim(ie).y, [1,1,n_r]);
     
-    y_ch = y_e - ( c_e .* h_e + b_e);
+    y_ch = y_e - ( c_e .* h_e + b_e );
     
     nllh = nllh + 0.5*sum(sum(nansum(...
         ~isnan(y_e).*log(2*pi*noise_e) + y_ch.^2 ./noise_e,...
