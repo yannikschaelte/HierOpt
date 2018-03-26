@@ -225,4 +225,6 @@ for iD = 1:length(D)
     D(iD).noise = D(iD).Sigma_Y.^2;
 end
 
+D = D(1);
+
 end

@@ -12,7 +12,7 @@ options.sc.distribution = distribution;
 switch approach
     case 'standard'
         load('data_rafmekerk_noreps.mat','D');
-        nllh = @(x) nllh_rafmekerk_standard(x,D,scOptions);
+        nllh = @(x) nllh_rafmekerk_standard(x,D,options.sc);
     case 'hierarchical-forward'
         load('data_rafmekerk.mat','D');
         nllh = @(x) nllh_rafmekerk_hierarchical_forward(x,D,options.sc);

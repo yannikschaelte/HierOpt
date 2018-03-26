@@ -19,7 +19,7 @@ function [ b ] = hieropt_b_normal( arr_y, arr_h, arr_noise, b_mode, c_mode )
 
 % [t,y,r,e]
 % assumptions: resolution(b) = resolution(c), resolution(b) \supset
-% resolution(sigma2)
+% resolution(sigma2), or sigma absolute (i.e. user-defined).
 
 if strcmp(b_mode,'absolute')
     b = 0;

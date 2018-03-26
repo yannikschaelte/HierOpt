@@ -16,7 +16,8 @@ options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
 options.MS.obj_type = 'negative log-posterior';
 
 load('erbb_signaling_pnom.mat','pnom');
-theta = log10(pnom+0.01); % some parameters are 0
+theta = log10(pnom);
+theta(~isfinite(theta)) = log10(eps); % some parameters are 0
 n_par = length(theta);
 min_par = theta - 2;
 max_par = theta + 3;
@@ -28,16 +29,14 @@ switch approach
         % nothing to be done
     case {'hierarchical-forward','hierarchical-adjoint'}
         n_par = n_par - 3;
-        sc.exp_groups.bc_idxs = {1,2,3};
-        sc.exp_groups.noise_idxs = {1,2,3};
+        sc.exp_groups.bc_idxs = {1}; % only use first experiment
+        sc.exp_groups.noise_idxs = {1};
         
         sc.obs_groups.bc_idcs = {1,2,3};
         sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
         sc.obs_groups.c_mode = {'single','single','single'};
         sc.obs_groups.noise_idxs = {1,2,3};
         sc.obs_groups.noise_mode = {'absolute','absolute','absolute'};
-       
-        sc.distribution = 'normal';
         
         options.sc = sc;
 end

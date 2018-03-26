@@ -7,7 +7,7 @@ options.MS.n_starts = n_starts;
 options.MS.mode = 'text';
 options.MS.localOptimizer = 'fmincon';
 options.MS.localOptimizerOptions = optimset('algorithm','interior-point',...
-    'display','off',...
+    'display','iter',...
     'GradObj','on',...
     'MaxIter',2000,...
     'TolFun',1e-10,...
@@ -43,8 +43,6 @@ switch approach
         sc.obs_groups.noise_idxs = {1,2,3};
         sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
-        sc.distribution = 'normal';
-        
         options.sc = sc;
         
     case 'hierarchical-forward'
@@ -59,8 +57,6 @@ switch approach
         sc.obs_groups.noise_idxs = {1,2,3};
         sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
         
-        sc.distribution = 'normal';
-        
         options.sc = sc;
         
     case 'hierarchical-forward-offsets'
@@ -74,9 +70,7 @@ switch approach
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
         sc.obs_groups.noise_idxs = {1,2,3};
         sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
-        
-        sc.distribution = 'normal';
-        
+       
         options.sc = sc;
         
     case 'hierarchical-adjoint-offsets'
@@ -91,8 +85,6 @@ switch approach
         sc.obs_groups.c_mode = {'multiple','multiple','absolute'};
         sc.obs_groups.noise_idxs = {1,2,3};
         sc.obs_groups.noise_mode = {'multiple','multiple','multiple'};
-        
-        sc.distribution = 'normal';
         
         options.sc = sc;
         

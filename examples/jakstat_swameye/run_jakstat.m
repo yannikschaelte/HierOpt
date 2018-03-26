@@ -13,7 +13,7 @@ options.sc.distribution = distribution;
 
 switch approach
     case 'standard'
-        nllh = @(x) nllh_jakstat_standard(x,D);
+        nllh = @(x) nllh_jakstat_standard(x,D,options.sc);
     case 'hierarchical-forward'
         nllh = @(x) nllh_jakstat_hierarchical_forward(x,D,options.sc);
     case 'hierarchical-adjoint'

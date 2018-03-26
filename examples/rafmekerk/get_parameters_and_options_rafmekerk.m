@@ -38,8 +38,6 @@ switch approach
         sc.obs_groups.noise_idxs = {1,2};
         sc.obs_groups.noise_mode = {'multiple','multiple'};
         
-        sc.distribution = 'normal';
-        
         options.sc = sc;
         
     case {'hierarchical-noreps-forward','hierarchical-noreps-adjoint'}
@@ -53,8 +51,6 @@ switch approach
         sc.obs_groups.c_mode = {'multiple','multiple','multiple','multiple','multiple','multiple','multiple','multiple'};
         sc.obs_groups.noise_idxs = {1,2,3,4,5,6,7,8};
         sc.obs_groups.noise_mode = {'multiple','multiple','multiple','multiple','multiple','multiple','multiple','multiple'};
-        
-        sc.distribution = 'normal';
         
         options.sc = sc;
         
