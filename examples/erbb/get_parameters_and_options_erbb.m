@@ -32,7 +32,7 @@ switch approach
         sc.exp_groups.bc_idxs = {1}; % only use first experiment
         sc.exp_groups.noise_idxs = {1};
         
-        sc.obs_groups.bc_idcs = {1,2,3};
+        sc.obs_groups.bc_idxs = {1,2,3};
         sc.obs_groups.b_mode = {'absolute','absolute','absolute'};
         sc.obs_groups.c_mode = {'single','single','single'};
         sc.obs_groups.noise_idxs = {1,2,3};
@@ -42,8 +42,8 @@ switch approach
 end
 
 parameters.number = n_par;
-parameters.min = min_par;
-parameters.max = max_par;
+parameters.min = min_par(1:n_par);
+parameters.max = max_par(1:n_par);
 parameters.guess = par0(1:n_par,1:n_starts);
 
 end

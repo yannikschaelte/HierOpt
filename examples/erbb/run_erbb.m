@@ -9,6 +9,7 @@ addpath(fullfile(exdir,'models'));
 D = get_data_erbb();
 
 [parameters,options] = get_parameters_and_options_erbb(approach);
+options.sc.distribution = 'normal'; % so far
 
 switch approach
     case 'standard'

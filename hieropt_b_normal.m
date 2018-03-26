@@ -53,7 +53,7 @@ end
 
 % else formula for both b and c optimal
 
-numerator = (sum_y - sum_yh*sum_h/sum_h2) / sum_recnoise;
+numerator = (arr_y - sum_yh*sum_h/sum_h2) / sum_recnoise;
 denominator = 1 - (sum_h^2 / sum_h2) / sum_recnoise;
 
 if abs(denominator) < eps
