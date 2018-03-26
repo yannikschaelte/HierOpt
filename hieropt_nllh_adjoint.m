@@ -97,9 +97,9 @@ else
             c_re = c_by_y{ie}(1,:,ir);
             c_re = reshape(c_re,[],1);
             
-            sigma_re = sqrt(noise{ie}(1,:,ir));
-            sigma_re = reshape(sigma_re,1,[]);
-            sigma_re = repmat(sigma_re,length(D(ie).t),1);
+            sigma_re = sqrt(noise{ie}(:,:,ir));
+%             sigma_re = reshape(sigma_re,1,[]);
+%             sigma_re = repmat(sigma_re,length(D(ie).t),1);
             
             kappa_re = [D(ie).condition(:); b_re; c_re];
             
