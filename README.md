@@ -21,7 +21,7 @@ As mentioned before, due to the modularity of the HierOpt toolbox, it is however
 
 In the [examples](examples), the hierarchical approach is used to perform parameter estimation on Systems Biology ODE models. The considered models are
 
-* [jakstat_swameye](examples/jakstat_swameye): a model of the JakStat signaling pathway with time-resolved input ofthe drug EPO,
+* [jakstat_swameye](examples/jakstat_swameye): a model of the JakStat signaling pathway with time-resolved input of the drug EPO,
 * [rafmekerk](examples/rafmekerk): a model of the RafMekErk signaling pathway,
 * [erbb](examples/erbb):  a model of ErbB signaling pathways.
 
