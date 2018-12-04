@@ -1,7 +1,7 @@
 % simulate_jakstat_hierarchical_adjoint_offsets.m is the matlab interface to the cvodes mex
 %   which simulates the ordinary differential equation and respective
 %   sensitivities according to user specifications.
-%   this routine was generated using AMICI commit fca5da754c7b6fa18dcd3b3b83660b3a39066d20 in branch master in repo https://github.com/icb-dcm/amici.
+%   this routine was generated using AMICI commit # in branch unknown branch in repo unknown repository.
 %
 % USAGE:
 % ======
@@ -27,11 +27,15 @@
 %           columns must correspond to event-types and rows to possible event-times
 % options ... additional options to pass to the cvodes solver. Refer to the cvodes guide for more documentation.
 %    .atol ... absolute tolerance for the solver. default is specified in the user-provided syms function.
+%        default value is 1e-16
 %    .rtol ... relative tolerance for the solver. default is specified in the user-provided syms function.
+%        default value is 1e-8
 %    .maxsteps    ... maximal number of integration steps. default is specified in the user-provided syms function.
+%        default value is 1e4
 %    .tstart    ... start of integration. for all timepoints before this, values will be set to initial value.
+%        default value is 0
 %    .sens_ind ... 1 dimensional vector of indexes for which sensitivities must be computed.
-%           default value is 1:length(theta).
+%        default value is 1:length(theta).
 %    .x0 ... user-provided state initialisation. This should be a vector of dimension [#states, 1].
 %        default is state initialisation based on the model definition.
 %    .sx0 ... user-provided sensitivity initialisation. this should be a matrix of dimension [#states x #parameters].
@@ -44,7 +48,7 @@
 %        2: Newton (DEFAULT)
 %    .linsol   ... linear solver module.
 %        direct solvers:
-%        1: Dense (DEFAULT)
+%        1: Dense
 %        2: Band (not implemented)
 %        3: LAPACK Dense (not implemented)
 %        4: LAPACK Band  (not implemented)
@@ -54,23 +58,29 @@
 %        7: SPBCG
 %        8: SPTFQMR
 %        sparse solvers:
-%        9: KLU
+%        9: KLU (DEFAULT)
 %    .stldet   ... flag for stability limit detection. this should be turned on for stiff problems.
 %        0: OFF
 %        1: ON (DEFAULT)
-%    .qPositiveX   ... vector of 0 or 1 of same dimension as state vector. 1 enforces positivity of states.
+%    .sensi   ... sensitivity order.
+%        0: OFF (DEFAULT)
+%        1: first
+%        2: second
 %    .sensi_meth   ... method for sensitivity analysis.
-%        'forward': forward sensitivity analysis (DEFAULT)
-%        'adjoint': adjoint sensitivity analysis 
+%        0: no sensitivity analysis
+%        1 or 'forward': forward sensitivity analysis (DEFAULT)
+%        2 or 'adjoint': adjoint sensitivity analysis 
+%        3 or 'ss': defined but not documented 
 %    .adjoint   ... flag for adjoint sensitivity analysis.
 %        true: on 
 %        false: off (DEFAULT)
+%        NO LONGER USED: Replaced by sensi_meth
 %    .ism   ... only available for sensi_meth == 1. Method for computation of forward sensitivities.
 %        1: Simultaneous (DEFAULT)
 %        2: Staggered
 %        3: Staggered1
 %    .Nd   ... only available for sensi_meth == 2. Number of Interpolation nodes for forward solution. 
-%              Default is 1000. 
+%        default is 1000. 
 %    .interpType   ... only available for sensi_meth == 2. Interpolation method for forward solution.
 %        1: Hermite (DEFAULT for problems without discontinuities)
 %        2: Polynomial (DEFAULT for problems with discontinuities)
@@ -78,6 +88,18 @@
 %        0: AMD reordering (default)
 %        1: COLAMD reordering
 %        2: natural reordering
+%    .newton_maxsteps   ... maximum newton steps
+%        default value is 40
+%        a value of 0 will disable the newton solver
+%    .newton_maxlinsteps   ... maximum linear steps
+%        default value is 100
+%    .newton_preeq   ... preequilibration of system via newton solver
+%        default value is false
+%    .pscale   ... parameter scaling
+%        []: (DEFAULT) use value specified in the model (fallback: 'lin')
+%        0 or 'lin': linear
+%        1 or 'log': natural log (base e)
+%        2 or 'log10': log to the base 10
 %
 % Outputs:
 % ========
@@ -134,15 +156,6 @@ end
 if(isempty(options_ami.pscale))
     options_ami.pscale = 'log10' ;
 end
-switch (options_ami.pscale)
-    case 1
-        chainRuleFactor = exp(theta(options_ami.sens_ind));
-    case 2
-        chainRuleFactor = 10.^theta(options_ami.sens_ind)*log(10);
-    otherwise
-        chainRuleFactor = ones(size(options_ami.sens_ind));
-end
-
 if(nargout>1)
     if(nargout>4)
         options_ami.sensi = 1;
@@ -156,26 +169,17 @@ if(nplist == 0)
     options_ami.sensi = 0;
 end
 nxfull = 9;
-if(isempty(options_ami.qpositivex))
-    options_ami.qpositivex = zeros(nxfull,1);
-else
-    if(numel(options_ami.qpositivex)>=nxfull)
-        options_ami.qpositivex = options_ami.qpositivex(:);
-    else
-        error(['Number of elements in options_ami.qpositivex does not match number of states ' num2str(nxfull) ]);
-    end
-end
 plist = options_ami.sens_ind-1;
 if(nargin>=4)
-    if(isempty(varargin{4}));
+    if(isempty(varargin{4}))
         data=[];
     else
-        if(isa(varargin{4},'amidata'));
+        if(isa(varargin{4},'amidata'))
              data=varargin{4};
         else
             data=amidata(varargin{4});
         end
-        if(data.ne>0);
+        if(data.ne>0)
             options_ami.nmaxevent = data.ne;
         else
             data.ne = options_ami.nmaxevent;
@@ -205,20 +209,21 @@ end
 init = struct();
 if(~isempty(options_ami.x0))
     if(size(options_ami.x0,2)~=1)
-        error('x0 field must be a row vector!');
+        error('x0 field must be a column vector!');
     end
     if(size(options_ami.x0,1)~=nxfull)
-        error('Number of columns in x0 field does not agree with number of states!');
+        error('Number of rows in x0 field does not agree with number of states!');
     end
     init.x0 = options_ami.x0;
 end
 if(~isempty(options_ami.sx0))
     if(size(options_ami.sx0,2)~=nplist)
-        error('Number of rows in sx0 field does not agree with number of model parameters!');
+        error('Number of columns in sx0 field does not agree with number of model parameters!');
     end
     if(size(options_ami.sx0,1)~=nxfull)
-        error('Number of columns in sx0 field does not agree with number of states!');
+        error('Number of rows in sx0 field does not agree with number of states!');
     end
+    chainRuleFactor = getChainRuleFactors(options_ami.pscale, theta, options_ami.sens_ind);
     init.sx0 = bsxfun(@times,options_ami.sx0,1./permute(chainRuleFactor(:),[2,1]));
 end
 sol = ami_jakstat_hierarchical_adjoint_offsets(tout,theta(1:10),kappa(1:6),options_ami,plist,xscale,init,data);
@@ -234,4 +239,23 @@ if(nargout>1)
 else
     varargout{1} = sol;
 end
+function chainRuleFactors = getChainRuleFactors(pscale, theta, sens_ind)
+    if(length(pscale) == 1 && length(sens_ind) ~= length(pscale))
+        chainRuleFactors = arrayfun(@(x, ip) getChainRuleFactor(x, theta(ip)), repmat(pscale, 1, length(sens_ind)), sens_ind);
+    else
+        chainRuleFactors = arrayfun(@(x, ip) getChainRuleFactor(x, theta(ip)), pscale, sens_ind);
+    end
+end
+
+function chainRuleFactor = getChainRuleFactor(pscale, parameterValue)
+    switch (pscale)
+        case 1
+            chainRuleFactor = exp(parameterValue);
+        case 2
+            chainRuleFactor = 10.^parameterValue*log(10);
+        otherwise
+            chainRuleFactor = 1.0;
+    end
+end
+
 end
