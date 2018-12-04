@@ -28,7 +28,7 @@ end
 
 parameters_res = getMultiStarts(parameters,nllh,options.MS);
 
-save(fullfile(exdir,['results_' approach '.mat']));
+save(fullfile(exdir,['results/results_' approach '.mat']));
 
 end
 
